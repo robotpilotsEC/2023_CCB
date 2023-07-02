@@ -8,9 +8,10 @@
 	
 	
 	
-#include "car_state.h"
-#include "enter_mode_control.h"
 #include "control.h"
+#include "car_state.h"
+#include "exchanges_control.h"
+#include "enter_mode_control.h"
 #include "communicate_protocol.h"
 
 car_t car;
@@ -32,6 +33,7 @@ void car_init(car_t *car)
 void car_mode_init(car_t *car) 
 {
 	car->mode_switch = NORMAL;
+	car->mode_ctrl = CCB_MODE;
 }
 
 
@@ -115,8 +117,8 @@ void car_mode_enter(car_t *car)
 		}
 	}
 	
-	if(car->ore_num>=3)
-		car->ore_num = 3;
+	if(car->ore_num>=2)
+		car->ore_num = 2;
 	else if(car->ore_num<0)
 		car->ore_num = 0;
 }
@@ -339,32 +341,32 @@ void KEY_E_status_check(car_t *car)
   }
 }
 
+uint8_t R_down=0;
 void KEY_R_status_check(car_t *car)
 {
   switch(rc.base_info->R.status)
   {
     case down_K:
-			if(MOUSEL_ONLY)
-				uplift.target -= UPLIFT_KEY_DEL;
-			else if(MOUSER_ONLY)
-				uplift.target += UPLIFT_KEY_DEL;
-			else
+			R_down = 1;
+			
+			if(car->mode_switch == EXCHANGE_ORE&&CTRL_DOWN&&car->step == 8&&Auto.config->target_OK == AUTO_OK)
+				Auto.config->key_dowm1 = AUTO_OK;
       break;
     case up_K:
+			if(R_down&&!CTRL_DOWN)
+			{
+				if(Auto.config->start_exchange_flag == AUTO_OK)
+					Auto.config->start_exchange_flag = AUTO_NO;
+				else
+					Auto.config->start_exchange_flag = AUTO_OK;
+				R_down = 0;
+			}
+			else
+				R_down = 0;
       break;
     case short_press_K:
-			if(MOUSEL_ONLY)
-				uplift.target -= UPLIFT_KEY_DEL;
-			else if(MOUSER_ONLY)
-				uplift.target += UPLIFT_KEY_DEL;
-			else
       break;
     case long_press_K:
-			if(MOUSEL_ONLY)
-				uplift.target -= UPLIFT_KEY_DEL;
-			else if(MOUSER_ONLY)
-				uplift.target += UPLIFT_KEY_DEL;
-			else
       break;
     default:
       break;
@@ -443,7 +445,7 @@ void KEY_Z_status_check(car_t *car)
 				car->mode_switch = NORMAL;
 				car->mode_ctrl = CCB_MODE;
 				car->step = 1;
-				car->step_lock = 1;
+				car->step_lock = 0;
 			}
 			else
       break;
@@ -468,7 +470,7 @@ void KEY_X_status_check(car_t *car)
 				car->mode_switch = SAVE;
 				car->mode_ctrl = CCB_MODE;
 				car->step = 1;
-				car->step_lock = 1;
+				car->step_lock = 0;
 			}
 			else if(!CTRL_DOWN&&FDOS_MODE&&MOUSEL_ONLY)
 				sucker.base_info.target_pitch -= PITCH_KEY_DEL;
@@ -508,7 +510,7 @@ void KEY_C_status_check(car_t *car)
 				car->mode_switch = EXCHANGE_ORE;
 				car->mode_ctrl = CCB_MODE;
 				car->step = 1;
-				car->step_lock = 1;
+				car->step_lock = 0;
 			}
 			else if(!CTRL_DOWN&&FDOS_MODE&&MOUSEL_ONLY)
 				sucker.base_info.target_yaw += YAW_KEY_DEL;
@@ -540,16 +542,23 @@ void KEY_V_status_check(car_t *car)
   switch(rc.base_info->V.status)
   {
     case down_K:
-			if(CTRL_DOWN)
+			if(CTRL_DOWN&&!SHIFT_DOWN)
 			{
 				car->mode_switch = SILVER_ORE;
 				car->mode_ctrl = CCB_MODE;
 				car->step = 1;
-				car->step_lock = 1;
+				car->step_lock = 0;
 			}
-			else if(!CTRL_DOWN&&MOUSEL_ONLY)
+			else if(CTRL_DOWN&&SHIFT_DOWN)
+			{
+				car->mode_switch = SILVER_ORE;
+				car->mode_ctrl = CCB_MODE;
+				car->step = 11;
+				car->step_lock = 0;
+			}
+			else if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSEL_ONLY)
 				sucker.base_info.target_roll -= ROLL_KEY_DEL;
-			else if(!CTRL_DOWN&&MOUSER_ONLY)
+			else if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSER_ONLY)
 				sucker.base_info.target_roll += ROLL_KEY_DEL;
 			else
 				
@@ -557,16 +566,16 @@ void KEY_V_status_check(car_t *car)
     case up_K:
       break;
     case short_press_K:
-			if(!CTRL_DOWN&&MOUSEL_ONLY)
+			if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSEL_ONLY)
 				sucker.base_info.target_roll -= ROLL_KEY_DEL;
-			else if(!CTRL_DOWN&&MOUSER_ONLY)
+			else if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSER_ONLY)
 				sucker.base_info.target_roll += ROLL_KEY_DEL;
 			else
       break;
     case long_press_K:
-			if(!CTRL_DOWN&&MOUSEL_ONLY)
+			if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSEL_ONLY)
 				sucker.base_info.target_roll -= ROLL_KEY_DEL;
-			else if(!CTRL_DOWN&&MOUSER_ONLY)
+			else if(!CTRL_DOWN&&!SHIFT_DOWN&&MOUSER_ONLY)
 				sucker.base_info.target_roll += ROLL_KEY_DEL;
 			else
       break;
@@ -604,7 +613,6 @@ void KEY_B_status_check(car_t *car)
   switch(rc.base_info->B.status)
   {
     case down_K:
-				
       break;
     case up_K:
       break;
@@ -669,10 +677,7 @@ void KEY_mouse_l_status_check(car_t *car)
     case up_K:
 			if(puneL_flag&&SHIFT_DOWN)
 			{
-//				if(pneumatic.pneu_state == ON)
-//					pneumatic.pneu_state = OFF;
-//				else
-					pneumatic.pneu_state = ON;
+				pneumatic.pneu_state = ON;
 				puneL_flag = 0;
 			}
 			else
@@ -680,7 +685,7 @@ void KEY_mouse_l_status_check(car_t *car)
 				
       break;
 		case relax_K:
-			if(downL_flag&&car->step_lock&&FDOS_RELAX)
+			if(downL_flag&&car->step_lock&&FDOS_RELAX&&CTRL_DOWN)
 				car->step++;	
 			downL_flag = 0;
 		
@@ -702,25 +707,22 @@ void KEY_mouse_l_status_check(car_t *car)
   }
 }
 
-uint8_t mouse_R_dow=0;
+uint8_t mouse_R_down=0;
 void KEY_mouse_r_status_check(car_t *car)
 {
   switch(rc.base_info->mouse_btn_r.status)
   {
     case down_K:
-			mouse_R_dow = 1;
+			mouse_R_down = 1;
       break;
     case up_K:
-			if(mouse_R_dow&&SHIFT_DOWN)
+			if(mouse_R_down&&SHIFT_DOWN)
 			{
-//				if(pneumatic.pneu_state == ON)
-//					pneumatic.pneu_state = OFF;
-//				else
-					pneumatic.pneu_state = OFF;
-				mouse_R_dow = 0;
+				pneumatic.pneu_state = OFF;
+				mouse_R_down = 0;
 			}
 			else
-				mouse_R_dow = 0;
+				mouse_R_down = 0;
 				
       break;
     case short_press_K:
@@ -761,17 +763,17 @@ void KEY_A_status_check(car_t *car)
   switch(rc.base_info->A.status)
   {
     case down_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target += UPLIFT_KEY_DEL;
       break;
     case up_K:
       break;
     case short_press_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target += UPLIFT_KEY_DEL;
       break;
     case long_press_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target += UPLIFT_KEY_DEL;
       break;
     default:
@@ -807,17 +809,17 @@ void KEY_D_status_check(car_t *car)
   switch(rc.base_info->D.status)
   {
     case down_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target -= UPLIFT_KEY_DEL;
       break;
     case up_K:
       break;
     case short_press_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target -= UPLIFT_KEY_DEL;
       break;
     case long_press_K:
-			if(SHIFT_EXCGANGE)
+			if(SHIFT_DOWN)
 				uplift.target -= UPLIFT_KEY_DEL;
       break;
     default:

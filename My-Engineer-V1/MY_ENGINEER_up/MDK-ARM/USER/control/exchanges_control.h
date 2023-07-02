@@ -10,10 +10,7 @@
 
 #include "config.h"
 
-#define	VIA_POINT_STEP				(15.f)
-#define	FRONT_X_OFFSET				(56.f)
-#define	FRONT_Y_OFFSET				(7.f)
-#define	FRONT_Z_OFFSET				(10.f)
+#define	VIA_POINT_STEP				(20.f)
 
 typedef enum	CAR_INIT_CONFIG
 {

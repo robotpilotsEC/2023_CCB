@@ -385,14 +385,21 @@ void KEY_G_status_check(car_t *car)
   {
     case down_K:
 			if(SHIFT_DOWN)
+			{
 				chassis.work_info.config.spin_flag = 1;
+				chassis.work_info.config.lock_flag = 0;
+			}
       break;
     case up_K:
 				chassis.work_info.config.spin_flag = 0;
       break;
     case short_press_K:
+			if(SHIFT_DOWN)
+				chassis.work_info.config.spin_flag = 1;
       break;
     case long_press_K:
+			if(SHIFT_DOWN)
+				chassis.work_info.config.spin_flag = 1;
       break;
 		case relax_K:
     default:
@@ -477,7 +484,7 @@ void KEY_B_status_check(car_t *car)
 				chassis.work_info.config.lock_flag = 1;
       break;
     case up_K:
-			if(car->mode_switch != EXCHANGE_ORE)
+//			if(car->mode_switch != EXCHANGE_ORE)
 				chassis.work_info.config.lock_flag = 0;
       break;
     case short_press_K:
@@ -498,19 +505,18 @@ void KEY_Shift_status_check(car_t *car)
   switch(rc.base_info->Shift.status)
   {
     case down_K:
-			if(FDOS_MODE)
+			if(!G_DOWN)
 				chassis.work_info.config.lock_flag = 1;
       break;
     case up_K:
-			if(FDOS_MODE)
 				chassis.work_info.config.lock_flag = 0;
       break;
     case short_press_K:
-			if(FDOS_MODE)
+			if(!G_DOWN)
 				chassis.work_info.config.lock_flag = 1;
       break;
     case long_press_K:
-			if(FDOS_MODE)
+			if(!G_DOWN)
 				chassis.work_info.config.lock_flag = 1;
       break;
     default:

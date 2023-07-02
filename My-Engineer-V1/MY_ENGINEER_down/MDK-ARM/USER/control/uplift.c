@@ -26,7 +26,7 @@ uplift_t uplift =
   * @author  
   * @Date    
 **/
-float uplift_mmmax=490000.f;
+float uplift_mmmax=496000.f;
 void Uplift_Pid_Calculating(uplift_t *uplift)
 {
 	uplift->base_info.target = constrain(uplift->base_info.target,0,uplift_mmmax);

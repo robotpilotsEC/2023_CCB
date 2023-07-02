@@ -96,10 +96,10 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 		if(sucker_time_cnt>50)
 		{
 			sucker->deffL->rx_info.angle_prev = sucker->deffL->rx_info.angle;
-			sucker->deffR->rx_info.angle_prev = sucker->deffR->rx_info.angle;
-			sucker->yaw->rx_info.angle_prev = sucker->yaw->rx_info.angle;
 			sucker->deffL->rx_info.angle_sum = 0;
+			sucker->deffR->rx_info.angle_prev = sucker->deffR->rx_info.angle;
 			sucker->deffR->rx_info.angle_sum = 0;
+			sucker->yaw->rx_info.angle_prev = sucker->yaw->rx_info.angle;
 			sucker->yaw->rx_info.angle_sum = 0;
 			
 			sucker_time_cnt = 0;
@@ -110,10 +110,6 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 	}
 	else if(sucker->reset&&!SYSTEM_RESET)
 	{
-		sucker->base_info.target_pitch = 0;
-		sucker->base_info.target_yaw= 0;
-		sucker->base_info.target_roll= 0;
-			
 		Sucker_Work_Normal(sucker);
 		return DEV_RESET_OK;	
 	}

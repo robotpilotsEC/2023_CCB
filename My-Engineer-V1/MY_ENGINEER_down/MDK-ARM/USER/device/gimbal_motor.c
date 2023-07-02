@@ -29,9 +29,9 @@ motor_t gimbal_motor[GIMBAL_MOTOR_LIST] =
 
 
 																								/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
-float gimbal_2006_posit_pid_param[7] 	 		= {		0.8,		0,		 0,			0,			0,				   0,			 2000};
+float gimbal_2006_posit_pid_param[7] 	 		= {		0.4,		0,		 0,			0,			0,				   0,			 2000};
 																							/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
-float gimbal_2006_posit_in_pid_param[7] 	= {		8,		0.1,		0,			0,		2000,			4000,			 8000};
+float gimbal_2006_posit_in_pid_param[7] 	= {		6,		0.1,		0,			0,		2000,			4000,			 8000};
 
 																				/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
 float gimbal_2006_speed_pid_param[7] 	= {		5,		0.1,		0,			0,				1500,			2000,			 2000};

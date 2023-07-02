@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file           : my_judge.c\h
-	* @author         : czf
+	* @author         : ccb
 	* @date           : 
   * @brief          : 根据《RoboMaster_裁判系统串口协议附录 V1.3》编写
 	                    针对机器人间交互数据
@@ -43,6 +43,7 @@
 #include "arm_math.h"
 #include "stdio.h"
 #include "judge_protocol.h"
+#include "exchanges_control.h"
 #include "control.h"
 #include "car_state.h"
 //#include "cap_protocol.h"
@@ -74,7 +75,7 @@ ext_client_custom_graphic_single_t g1;
 void tick_task(uint16_t time)
 {
 	uint16_t cnt_max = 1000 / time / send_frequency;
-	uint8_t task_num_max = 10;
+	uint8_t task_num_max = 11;
 	static uint16_t cnt = 0;
 	static uint8_t task_num = 0;
 	client_info_update();
@@ -112,6 +113,9 @@ void tick_task(uint16_t time)
 				break;
 			case 9:
 				UI_send_group1();
+				break;
+			case 10:
+				UI_send_group2();
 				break;
 			default:
 				break;
@@ -874,6 +878,7 @@ char RESCUE_info[30] = {"RESCUE"};
 char GOLDEN_info[30] = {"GOLDEN"};
 char SILVER_info[30] = {"SILVER"};
 char EXCHANGE_info[30] = {"EXCHANGE"};
+char CCB_info[30] = {"CCB"};
 
 char mode_ctrl_info[30];
 char mode_switch_info[30];
@@ -906,13 +911,16 @@ void UI_send_char_7(void)
 			memcpy(mode_ctrl_info,RESCUE_info,sizeof(RESCUE_info));
 			break;
 		case SILVER_ORE:
-			memcpy(mode_ctrl_info,GOLDEN_info,sizeof(GOLDEN_info));
+			memcpy(mode_ctrl_info,SILVER_info,sizeof(SILVER_info));
 			break;
 		case GOLDEN_ORE:
-			memcpy(mode_ctrl_info,SILVER_info,sizeof(SILVER_info));
+			memcpy(mode_ctrl_info,GOLDEN_info,sizeof(GOLDEN_info));
 			break;
 		case EXCHANGE_ORE:
 			memcpy(mode_ctrl_info,EXCHANGE_info,sizeof(EXCHANGE_info));
+			break;
+		case CCB_MODE:
+			memcpy(mode_ctrl_info,CCB_info,sizeof(CCB_info));
 			break;
 		default:
 			break;
@@ -964,13 +972,16 @@ void UI_send_char_8(void)
 			memcpy(mode_switch_info,RESCUE_info,sizeof(RESCUE_info));
 			break;
 		case SILVER_ORE:
-			memcpy(mode_switch_info,GOLDEN_info,sizeof(GOLDEN_info));
+			memcpy(mode_switch_info,SILVER_info,sizeof(SILVER_info));
 			break;
 		case GOLDEN_ORE:
-			memcpy(mode_switch_info,SILVER_info,sizeof(SILVER_info));
+			memcpy(mode_switch_info,GOLDEN_info,sizeof(GOLDEN_info));
 			break;
 		case EXCHANGE_ORE:
 			memcpy(mode_switch_info,EXCHANGE_info,sizeof(EXCHANGE_info));
+			break;
+		case CCB_MODE:
+			memcpy(mode_switch_info,CCB_info,sizeof(CCB_info));
 			break;
 		default:
 			break;
@@ -1129,6 +1140,7 @@ void UI_send_group1(void)
     operate_tpye = MODIFY;
   }
 	
+	vision_lock = Auto.config->target_OK;
 	if(!vision_lock)
 		vision_color = WHITE;
 	else
@@ -1250,6 +1262,139 @@ void UI_send_group1(void)
 																				 ui_rescue_pos7,  
 																				 ui_rescue_pos8);
 	client_send_seven_graphic(Group2);
+
+	cnt++;
+  cnt %= 30;
+}
+
+uint16_t ui_lob_pos1;
+uint16_t ui_lob_pos2;
+uint16_t ui_lob_pos3;
+uint16_t ui_lob_pos4;
+uint16_t ui_lob_pos5;
+uint16_t ui_lob_pos6;
+uint16_t ui_lob_pos7;
+uint16_t ui_lob_pos8;
+uint16_t ui_silver_pos1;
+uint16_t ui_silver_pos2;
+uint16_t ui_silver_pos3;
+uint16_t ui_silver_pos4;
+uint16_t ui_silver_pos5;
+uint16_t ui_silver_pos6;
+uint16_t ui_silver_pos7;
+uint16_t ui_silver_pos8;
+uint16_t ccbbbb=90;
+uint16_t ccbbbb1=600;
+uint16_t ccbbbb2=90;
+uint16_t ccbbbb12=600;
+void UI_send_group2(void)
+{
+	static int cnt = 0;
+  static int operate_tpye = ADD;
+	
+  if(cnt == 0)//add num
+  {
+    operate_tpye = ADD;  
+  }
+  else 
+  {
+    operate_tpye = MODIFY;
+  }
+	
+	
+	if(car.mode_switch == LOB||car.mode_switch == LOB)//
+	{
+		ui_lob_pos1 = Client_mid_position_x - ccbbbb;
+		ui_lob_pos2 = Client_mid_position_y + ccbbbb1;
+		ui_lob_pos3 = Client_mid_position_x - ccbbbb;
+		ui_lob_pos4 = 0;
+		
+		
+		ui_lob_pos5 = Client_mid_position_x + ccbbbb;
+		ui_lob_pos6 = Client_mid_position_y + ccbbbb1;
+		ui_lob_pos7 = Client_mid_position_x + ccbbbb;
+		ui_lob_pos8 = 0;
+	}
+	else 
+	{
+		ui_lob_pos1 = 0;
+		ui_lob_pos2 = 0;
+		ui_lob_pos3 = 0;
+		ui_lob_pos4 = 0;
+		ui_lob_pos5 = 0;
+		ui_lob_pos6 = 0;
+		ui_lob_pos7 = 0;
+		ui_lob_pos8 = 0;
+	}
+	/*left*/
+	Group3.grapic_data_struct[0] = draw_line("ll1",
+                                       operate_tpye,
+                                       1, 
+                                       RED_BLUE, 
+                                       3, 
+                                       ui_lob_pos1, 
+                                       ui_lob_pos2, 
+                                       ui_lob_pos3, 
+                                       ui_lob_pos4);
+	
+	/*right*/
+  Group3.grapic_data_struct[1] = draw_line("ll2", 
+                                       operate_tpye, 
+                                       1,  
+                                       RED_BLUE, 
+                                       3,  
+                                       ui_lob_pos5, 
+                                       ui_lob_pos6, 
+                                       ui_lob_pos7,  
+                                       ui_lob_pos8);
+																			 
+	if((car.mode_switch == SILVER_ORE||car.mode_switch == SILVER_ORE)&&car.step >= 11)//
+	{
+		ui_silver_pos1 = Client_mid_position_x - ccbbbb2;
+		ui_silver_pos2 = Client_mid_position_y + ccbbbb12;
+		ui_silver_pos3 = Client_mid_position_x - ccbbbb2;
+		ui_silver_pos4 = 0;
+		
+		
+		ui_silver_pos5 = Client_mid_position_x + ccbbbb2;
+		ui_silver_pos6 = Client_mid_position_y + ccbbbb12;
+		ui_silver_pos7 = Client_mid_position_x + ccbbbb2;
+		ui_silver_pos8 = 0;
+	}
+	else 
+	{
+		ui_silver_pos1 = 0;
+		ui_silver_pos2 = 0;
+		ui_silver_pos3 = 0;
+		ui_silver_pos4 = 0;
+		ui_silver_pos5 = 0;
+		ui_silver_pos6 = 0;
+		ui_silver_pos7 = 0;
+		ui_silver_pos8 = 0;
+	}
+	/*left*/
+	Group3.grapic_data_struct[2] = draw_line("ls1",
+                                       operate_tpye,
+                                       1, 
+                                       RED_BLUE, 
+                                       3, 
+                                       ui_silver_pos1, 
+                                       ui_silver_pos2, 
+                                       ui_silver_pos3, 
+                                       ui_silver_pos4);
+	
+	/*right*/
+  Group3.grapic_data_struct[3] = draw_line("ls2", 
+                                       operate_tpye, 
+                                       1,  
+                                       RED_BLUE, 
+                                       3,  
+                                       ui_silver_pos5, 
+                                       ui_silver_pos6, 
+                                       ui_silver_pos7,  
+                                       ui_silver_pos8);
+
+	client_send_seven_graphic(Group3);
 
 	cnt++;
   cnt %= 30;

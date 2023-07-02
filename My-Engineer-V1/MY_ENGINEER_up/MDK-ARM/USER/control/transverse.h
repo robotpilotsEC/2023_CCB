@@ -16,32 +16,36 @@
 #define	TRANSVERSE_A2MM												(0.0005f)
 #define	TRANSVERSE_A2CM												(0.00005f)
 
-#define TRANSVERSE_MAX												(740000)
+#define TRANSVERSE_MAX												(695000)
 #define TRANSVERSE_MIN												(5000)
 #define TRANSVERSE_SPEED											(-800)
 
 #define TRANSVERSE_LOB												TRANSVERSE_MAX
-#define TRANSVERSE_NORMAL											(80000)
+#define TRANSVERSE_NORMAL											(150000)
 #define TRANSVERSE_GROUND											(120000)
 #define TRANSVERSE_GOLDEN											TRANSVERSE_LOB
-#define TRANSVERSE_SILVER											(100000)
+#define TRANSVERSE_SILVER											(130000)
+#define TRANSVERSE_TWO_ORES										(100000)
+#define TRANSVERSE_TWO_ORES2									(80000)
 #define TRANSVERSE_EXCHANGE										TRANSVERSE_SILVER
 #define TRANSVERSE_PUSH_ORE										TRANSVERSE_AFTER_PLACE
 #define TRANSVERSE_BEFORE_EXCHANGE						(50000)
 #define TRANSVERSE_PLACE											(40000)
 #define TRANSVERSE_AFTER_PLACE								(120000)
 
-#define LOB_TRANSVERSE_IS_OK 									(distance(transverse.base_info.measure_angle,TRANSVERSE_LOB)<300 && m_abs(transverse.base_info.measure_speed <10))
-#define NORMAL_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_NORMAL)<300 && transverse.base_info.measure_speed < 50)
+#define LOB_TRANSVERSE_IS_OK 									(distance(transverse.base_info.measure_angle,TRANSVERSE_LOB)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define TWO_ORES_TRANSVERSE_IS_OK 						(distance(transverse.base_info.measure_angle,TRANSVERSE_TWO_ORES)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define TWO_ORES2_TRANSVERSE_IS_OK 						(distance(transverse.base_info.measure_angle,TRANSVERSE_TWO_ORES2)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define NORMAL_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_NORMAL)<300 && transverse.base_info.measure_speed == 0)
 #define GOLDEN_TRANSVERSE_IS_OK 							LOB_TRANSVERSE_IS_OK
-#define SILVER_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_SILVER)<300 && m_abs(transverse.base_info.measure_speed <10))
+#define SILVER_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_SILVER)<300 && m_abs(transverse.base_info.measure_speed <5))
 #define EXCHANGE_TRANSVERSE_IS_OK 						SILVER_TRANSVERSE_IS_OK
 #define PUSH_ORE_TRANSVERSE_IS_OK 						AFTER_PLACE_TRANSVERSE_IS_OK
-#define BEFORE_EXCHANGE_TRANSVERSE_IS_OK 			(distance(transverse.base_info.measure_angle,TRANSVERSE_MAX)<300 && m_abs(transverse.base_info.measure_speed <10))
-#define GROUND_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_GROUND)<300 && m_abs(transverse.base_info.measure_speed <10))
-#define PLACE_TRANSVERSE_IS_OK 								(distance(transverse.base_info.measure_angle,TRANSVERSE_PLACE)<300 && m_abs(transverse.base_info.measure_speed <10))
-#define AFTER_PLACE_TRANSVERSE_IS_OK 					(distance(transverse.base_info.measure_angle,TRANSVERSE_AFTER_PLACE)<300 && m_abs(transverse.base_info.measure_speed <10))
-#define TRANSVERSE_MINI_OK 										(distance(transverse.base_info.measure_angle,TRANSVERSE_MIN)<300 && m_abs(transverse.base_info.measure_speed <10))
+#define BEFORE_EXCHANGE_TRANSVERSE_IS_OK 			(distance(transverse.base_info.measure_angle,TRANSVERSE_MAX)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define GROUND_TRANSVERSE_IS_OK 							(distance(transverse.base_info.measure_angle,TRANSVERSE_GROUND)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define PLACE_TRANSVERSE_IS_OK 								(distance(transverse.base_info.measure_angle,TRANSVERSE_PLACE)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define AFTER_PLACE_TRANSVERSE_IS_OK 					(distance(transverse.base_info.measure_angle,TRANSVERSE_AFTER_PLACE)<300 && m_abs(transverse.base_info.measure_speed <5))
+#define TRANSVERSE_MINI_OK 										(distance(transverse.base_info.measure_angle,TRANSVERSE_MIN)<300 && transverse.base_info.measure_speed == 0)
 
 
 /* Exported types ------------------------------------------------------------*/
@@ -85,7 +89,7 @@ typedef struct transverse_class_t
 	
 	
 	transverse_base_info_t   	base_info;
-	transverse_work_state_e   work_sate;
+	motor_state_e   work_sate;
 	
 	void                (*work)(struct transverse_class_t *transverse);
 	

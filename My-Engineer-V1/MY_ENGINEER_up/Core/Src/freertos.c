@@ -113,15 +113,15 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of ControlTask */
-  osThreadDef(ControlTask, StartControlTask, osPriorityIdle, 0, 128);
+  osThreadDef(ControlTask, StartControlTask, osPriorityAboveNormal, 0, 1024);
   ControlTaskHandle = osThreadCreate(osThread(ControlTask), NULL);
 
   /* definition and creation of HeartBeatTask */
-  osThreadDef(HeartBeatTask, StartHeartBeatTask, osPriorityIdle, 0, 128);
+  osThreadDef(HeartBeatTask, StartHeartBeatTask, osPriorityAboveNormal, 0, 256);
   HeartBeatTaskHandle = osThreadCreate(osThread(HeartBeatTask), NULL);
 
   /* definition and creation of RealTimeTask */
-  osThreadDef(RealTimeTask, StartRealTimeTask, osPriorityIdle, 0, 128);
+  osThreadDef(RealTimeTask, StartRealTimeTask, osPriorityHigh, 0, 1024);
   RealTimeTaskHandle = osThreadCreate(osThread(RealTimeTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */

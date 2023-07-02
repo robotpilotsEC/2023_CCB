@@ -43,7 +43,7 @@ uint8_t vision_data_rx(uint8_t *rxBuf)
 
 uint32_t vision_tx_cnt = 0;
 uint8_t vision_data_tx(void)
-{
+{	
 	vision_tx_cnt ++;
 	memcpy(vision_txBuf, &vision_tx_info, sizeof(vision_tx_info_t));
 	Append_CRC8_Check_Sum(vision_txBuf, 3);

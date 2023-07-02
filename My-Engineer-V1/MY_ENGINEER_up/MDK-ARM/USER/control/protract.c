@@ -72,8 +72,8 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 		protract->motor->base_info.motor_out = protract->base_info.output;
 		
 		
-		if((distance(protract->motor->rx_info.angle_prev,protract->motor->rx_info.angle)<20)\
-				&&(m_abs(protract->motor->rx_info.speed)<=20))
+		if((distance(protract->motor->rx_info.angle_prev,protract->motor->rx_info.angle)<200)\
+				&&(m_abs(protract->motor->rx_info.speed)<=10))
 			protract_time_cnt++;
 		else
 			protract_time_cnt = 0;
@@ -90,7 +90,6 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 	}
 	else if(protract->reset&&!SYSTEM_RESET)
 	{
-		protract->base_info.target = PROTRACT_MID;
 		Protract_Work_Normal(protract);
 		return DEV_RESET_OK;	
 	}

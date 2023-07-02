@@ -111,6 +111,9 @@ void judge_update(judge_t *judge_sen,uint8_t *rxBuf)
 						memcpy(&judge_sen->game_robot_status,rxBuf+7, judge_sen->fream_header.data_length);		
 						Determine_ID();					
 					break;
+					case ID_controller_interactive_header_data:
+						memcpy(&judge_sen->custom_info,rxBuf+7, judge_sen->fream_header.data_length);
+					break;
 				}
 			}
 		}

@@ -11,13 +11,13 @@
 
 #include "stm32f4xx_hal.h"
 
-#define constrain(x, min, max)			((x>(max))?max:(x<(min)?min:(x)))
-#define range(x, min, max)					((((x)<(max)) && ((x)>(min)))?1:0)
-#define c_abs(x) 										((x)>0? (x):(-(x)))
-#define	c_max2(x,y)									(c_abs(x)>c_abs(y)?x:y)
-#define distance(x,y)								((x>=y)?(x-y):(y-x))
-#define	d2r_f32(x) 									(0.01745329f*(x))
-#define	r2d_f32(x) 									(57.29578f*(x))
+#define constrain(x, min, max)			((x>(max))?max:(x<(min)?min:(x)))//限幅
+#define range(x, min, max)					((((x)<(max)) && ((x)>(min)))?1:0)//范围
+#define c_abs(x) 										((x)>0? (x):(-(x)))//绝对值
+#define	c_max2(x,y)									(c_abs(x)>c_abs(y)?x:y)//下限
+#define distance(x,y)								((x>=y)?(x-y):(y-x))//距离
+#define	d2r_f32(x) 									(0.01745329f*(x))//度to弧度
+#define	r2d_f32(x) 									(57.29578f*(x))//弧度to度
 #define	pi													(3.141592653f)
 /******************************全局使用枚举******************************/
 

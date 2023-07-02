@@ -93,7 +93,8 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 /*--------------------------------------·¢-------------------------------------------*/
 /*--------------------------------------·¢-------------------------------------------*/
 uint8_t can_txbuff[8];
-void can_send(void)
+uint32_t can_send_cnt = 0;
+uint8_t can_send(void)
 {
 	memset(can_txbuff,0,sizeof(can_txbuff));
 	
@@ -108,7 +109,8 @@ void can_send(void)
 				if(device[i].motor->id.rx_id>=0x201&&device[i].motor->id.rx_id<=0x204)
 					device[i].motor->tx(device[i].motor,can_txbuff,8);
 	}
-	while(HAL_CAN_AddTxMessage(&hcan1,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX0)!=HAL_OK);
+	if(HAL_CAN_AddTxMessage(&hcan1,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX0)!=HAL_OK)
+		return HAL_ERROR;
 	memset(can_txbuff,0,sizeof(can_txbuff));
 	/*CAN2*/
 	if(RC_ONLINE)
@@ -119,7 +121,8 @@ void can_send(void)
 				if(device[i].motor->id.rx_id>=0x201&&device[i].motor->id.rx_id<=0x204)
 					device[i].motor->tx(device[i].motor,can_txbuff,8);
 	}
-	while(HAL_CAN_AddTxMessage(&hcan2,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX1)!=HAL_OK);
+	if(HAL_CAN_AddTxMessage(&hcan2,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX1)!=HAL_OK)
+		return HAL_ERROR;
 	memset(can_txbuff,0,sizeof(can_txbuff));
 
 	/*****0x1ff°ü*****/
@@ -133,7 +136,8 @@ void can_send(void)
 				if(device[i].motor->id.rx_id>=0x205&&device[i].motor->id.rx_id<=0x208)
 					device[i].motor->tx(device[i].motor,can_txbuff,8);
 	}
-	while(HAL_CAN_AddTxMessage(&hcan1,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX0)!=HAL_OK);
+	if(HAL_CAN_AddTxMessage(&hcan1,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX0)!=HAL_OK)
+		return HAL_ERROR;
 	memset(can_txbuff,0,sizeof(can_txbuff));
 	/*CAN2*/
 	if(RC_ONLINE)
@@ -144,9 +148,11 @@ void can_send(void)
 				if(device[i].motor->id.rx_id>=0x205&&device[i].motor->id.rx_id<=0x208)
 					device[i].motor->tx(device[i].motor,can_txbuff,8);
 	}
-	while(HAL_CAN_AddTxMessage(&hcan2,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX1)!=HAL_OK);
+	if(HAL_CAN_AddTxMessage(&hcan2,&CAN_TxHeadeType,can_txbuff,(uint32_t *)CAN_TX_MAILBOX1)!=HAL_OK)
+		return HAL_ERROR;
 	memset(can_txbuff,0,sizeof(can_txbuff));
 	
+	return HAL_OK;
 }
 
 

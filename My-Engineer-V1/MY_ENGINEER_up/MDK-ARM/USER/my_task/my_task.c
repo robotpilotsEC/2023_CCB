@@ -9,6 +9,7 @@
 #include "my_judge.h"
 #include "judge_protocol.h"
 
+extern IWDG_HandleTypeDef hiwdg;
 /**
   * @Name    
   * @brief   
@@ -24,9 +25,8 @@ void StartControlTask(void const * argument)
 	device_init();
   for(;;)
   {
-		rc_ctrl(&rc);
 		car_ctrl(&car);
-//		Automatic_Exchange(&Auto);
+		Automatic_Exchange(&Auto);
 		system_reset();
 		device_work();
 		can_send();
@@ -46,9 +46,10 @@ void StartRealTimeTask(void const * argument)
 {
 	for(;;)
   {
-		tick_task(1);
-		vision_data_tx();
+		rc_ctrl(&rc);
 		communicate_data_tx();
+		HAL_IWDG_Refresh(&hiwdg);
+		check_judge_offline(&judge);
     osDelay(1);
   }
 }
@@ -66,9 +67,10 @@ void StartHeartBeatTask(void const * argument)
   for(;;)
   {
 		device_heart_beat();
-		check_judge_offline(&judge);
 		rc_heart_beat(&rc);
-    osDelay(2);
+		vision_data_tx();
+		tick_task(1);
+    osDelay(1);
   }
 }
 

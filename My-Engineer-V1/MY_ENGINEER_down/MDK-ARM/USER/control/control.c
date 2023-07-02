@@ -23,7 +23,10 @@ void system_reset(void)
 			uplift.reset = Uplift_Work_Init(&uplift);
 				
 		if(uplift.reset&&gimbal.reset&&rescue.reset)
+		{
 			control.slaver_reset = DEV_RESET_OK;
+			car.ctrl_mode = KEY_CAR;
+		}
 	
 	}
 	else if(!RC_ONLINE)
@@ -38,6 +41,8 @@ void system_reset(void)
 		chassis.base_info.target.right_speed  = 0;
 		
 		car.mode_switch = NORMAL;
+		car.mode_ctrl = NORMAL;
+		car.ctrl_mode = RC_CAR;
 		car.step = 1;
 				
 		uplift.reset = DEV_RESET_NO;

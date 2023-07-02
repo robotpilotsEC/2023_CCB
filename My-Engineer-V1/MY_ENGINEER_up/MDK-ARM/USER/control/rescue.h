@@ -13,8 +13,8 @@
 /* Exported variables ---------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 #define RESCUE_MAX								(75000)
-#define RESCUE_MID								(53000)
-#define RESCUE_DOWN								(55000)
+#define RESCUE_MID								(52000)
+#define RESCUE_DOWN								(57000)
 #define RESCUE_MIN								(5000)
 
 #define RESCUE_MINI_OK 						(distance(rescue.measure_angle,RESCUE_MIN)<600 && rescue.measure_speed == 0)

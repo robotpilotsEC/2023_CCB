@@ -22,6 +22,7 @@
 #include "cmsis_os.h"
 #include "can.h"
 #include "dma.h"
+#include "iwdg.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -31,7 +32,7 @@
 #include "drv_uart.h"
 #include "bmi2_defs.h"
 #include "bmi.h"
-
+#include "device.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,7 +64,7 @@ int16_t rs = 0;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t rslt;
 /* USER CODE END 0 */
 
 /**
@@ -91,16 +92,21 @@ int main(void)
   /* USER CODE BEGIN SysInit */
 //	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_RESET);
 //	HAL_Delay(500);
-//	while(BMI_Init()!=BMI2_OK){}
+//	rslt = BMI_Init();
+//	while(rslt!=BMI2_OK)
+//	{
+//		rslt = BMI_Init();
+//	}
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_RESET);
 	HAL_Delay(500);
-	while(BMI_Init()!=BMI2_OK)
+	rslt = BMI_Init();
+	while(rslt!=BMI2_OK)
 	{
-		rs = BMI_Init();
+		rslt = BMI_Init();
 	}
   MX_DMA_Init();
   MX_CAN1_Init();
@@ -112,13 +118,13 @@ int main(void)
   MX_UART5_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-	CAN1_Init();
-	CAN2_Init();
+	device_init();	
 	USART1_Init();
 	USART2_Init();
 	USART3_Init();
-	USART4_Init();
-	USART5_Init();
+	CAN1_Init();
+	CAN2_Init();
+//  MX_IWDG_Init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -154,8 +160,9 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;

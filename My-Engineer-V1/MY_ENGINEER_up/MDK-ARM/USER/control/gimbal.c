@@ -41,7 +41,7 @@ void Gimbal_Work(gimbal_t *gimbal)
 		if(car.mode_switch!=EXCHANGE_ORE && car.mode_ctrl!=EXCHANGE_ORE)
 			gimbal->target_yaw -= rc.info->mouse_x_K*0.7f;
 	}
-	gimbal->target_pitch = constrain(gimbal->target_pitch,GIMBAL_PITCH_MIN,GIMBAL_PITCH_MAX);
+	gimbal->target_pitch = constrain(gimbal->target_pitch,GIMBAL_PITCH_MIN,70000);
 	gimbal->target_yaw = constrain(gimbal->target_yaw,GIMBAL_YAW_MIN,GIMBAL_YAW_MAX);
 	communicate_tx_info.pitch_target = gimbal->target_pitch;
 	communicate_tx_info.yaw_target = gimbal->target_yaw;

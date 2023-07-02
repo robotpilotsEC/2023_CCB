@@ -4,14 +4,15 @@
 #include "device.h"
 #include "control.h"
 #include "car_state.h"
+#include "drv_haltick.h"
 #include "can_protocol.h"
 #include "communicate_protocol.h"
 
+extern IWDG_HandleTypeDef hiwdg;
 void StartControlTask(void const * argument)
 {
 	rc_init(&rc);
 	car_init(&car);
-	device_init();	
   for(;;)
   {
 		rc_ctrl(&rc);
@@ -23,12 +24,19 @@ void StartControlTask(void const * argument)
   }
 }
 
+uint32_t time1=0;
+uint32_t time2=0;
+uint32_t time3=0;
 void StartRealTimeTask(void const * argument)
 {
 	for(;;)
   {
+//		time1 = micros();
+		HAL_IWDG_Refresh(&hiwdg);
 		imu.update(&imu);	
 		communicate_data_tx();
+//		time2 = micros();
+//		time3 = time2-time1;
     osDelay(1);
   }
 }
@@ -39,7 +47,7 @@ void StartHeartBeatTask(void const * argument)
   {
 		device_heart_beat();
 		rc_heart_beat(&rc);
-    osDelay(2);
+    osDelay(1);
   }
 }
 

@@ -93,7 +93,6 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 	}
 	else if(transverse->reset&&!SYSTEM_RESET)
 	{
-		transverse->base_info.target = TRANSVERSE_MIN;
 		Transverse_Work_Normal(transverse);
 		return DEV_RESET_OK;	
 	}
@@ -112,6 +111,7 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 **/
 void Transverse_Work(transverse_t *transverse)
 {
+	transverse->work_sate = transverse->front->state.work_state;
 	transverse->base_info.measure_angle = transverse->front->rx_info.angle_sum;
 	transverse->base_info.angle2mm = transverse->front->rx_info.angle_sum*TRANSVERSE_A2MM;
 	transverse->base_info.measure_speed = transverse->front->rx_info.speed;

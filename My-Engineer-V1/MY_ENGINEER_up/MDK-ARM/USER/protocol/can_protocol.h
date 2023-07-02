@@ -11,7 +11,7 @@ typedef enum
 	CAN_0x280_ID = 0x280,
 }CAN_ID;
 
-void can_send(void);
+uint8_t can_send(void);
 void KT_motorAngle_rx(void);
 void CAN1_rxDataHandler(uint32_t canId, uint8_t *rxBuf);
 void CAN2_rxDataHandler(uint32_t canId, uint8_t *rxBuf);

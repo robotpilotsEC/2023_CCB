@@ -292,7 +292,7 @@ void UI_send_char_7(void);
 void UI_send_char_8(void);
 void UI_send_int_1(void);
 void UI_send_group1(void);
-
+void UI_send_group2(void);
 
 uint8_t client_send_single_graphic(ext_client_custom_graphic_single_t data);
 uint8_t client_send_double_graphic(ext_client_custom_graphic_double_t data);

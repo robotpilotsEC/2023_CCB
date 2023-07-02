@@ -81,9 +81,9 @@ Dev_Reset_State_e Gimbal_Work_Init(gimbal_t *gimbal)
 		gimbal->yaw->base_info.motor_out = gimbal->base_info.output_yaw;
 		
 		if((distance(gimbal->pitch->rx_info.angle_prev,gimbal->pitch->rx_info.angle)<50)\
-				&&(m_abs(gimbal->pitch->rx_info.speed)==0)\
+				&&(m_abs(gimbal->pitch->rx_info.speed)<10)\
 				&&(distance(gimbal->yaw->rx_info.angle_prev,gimbal->yaw->rx_info.angle)<50)\
-				&&(m_abs(gimbal->yaw->rx_info.speed)==0))
+				&&(m_abs(gimbal->yaw->rx_info.speed)<10))
 			gimbal_time_cnt++;
 		else
 			gimbal_time_cnt = 0;

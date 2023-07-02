@@ -30,7 +30,7 @@ void Uplift_Work(uplift_t *uplift)
 	uplift->angle2mm = communicate_rx_info.uplift_angle*UPLIFT_A2MM+400.f;
 	uplift->measure_speed = communicate_rx_info.uplift_speed;
 	
-	uplift->target = constrain(uplift->target,UPLIFT_MIN,UPLIFT_MAX);
+	uplift->target = constrain(uplift->target,UPLIFT_MIN,UPLIFT_MAX);//
 	communicate_tx_info.uplift_target = uplift->target;
 	
 }

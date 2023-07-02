@@ -18,6 +18,7 @@
 #define	CAR_MODE_SWITCH_DONE			(car->mode_switch == car->mode_ctrl)
 #define CTRL_DOWN	 								(rc.base_info->Ctrl.status  == down_K || rc.base_info->Ctrl.status  == short_press_K || rc.base_info->Ctrl.status  == long_press_K)
 #define SHIFT_DOWN	 							(rc.base_info->Shift.status == down_K || rc.base_info->Shift.status == short_press_K || rc.base_info->Shift.status == long_press_K)
+#define G_DOWN	 									(rc.base_info->G.status == down_K || rc.base_info->G.status == short_press_K || rc.base_info->G.status == long_press_K)
 #define MOUSEL_DOWN	 							(rc.base_info->mouse_btn_l.status == down_K || rc.base_info->mouse_btn_l.status == short_press_K || rc.base_info->mouse_btn_l.status == long_press_K)
 #define MOUSER_DOWN	 							(rc.base_info->mouse_btn_r.status == down_K || rc.base_info->mouse_btn_r.status == short_press_K || rc.base_info->mouse_btn_r.status == long_press_K)
 #define UPLIFT_KEY_DEL						(70.f)

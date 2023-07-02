@@ -302,22 +302,22 @@ void Chassis_Speed_Max_Switch(chassis_t *chassis)
 	switch(car.mode_switch)
 	{
 		case LOB:
-			config->chassis_speed_max = 2000.f;
+			config->chassis_speed_max = 3500.f;
 			break;
 		case SILVER_ORE:
-			config->chassis_speed_max = 2000.f;
+			config->chassis_speed_max = 3500.f;
 			break;
 		case GOLDEN_ORE:
-			config->chassis_speed_max = 2000.f;
+			config->chassis_speed_max = 3500.f;
 			break;
 		case GROUND_ORE:
-			config->chassis_speed_max = 2000.f;
+			config->chassis_speed_max = 3500.f;
 			break;
 		case EXCHANGE_ORE:
-			config->chassis_speed_max = 2000.f;
+			config->chassis_speed_max = 3500.f;
 			break;
 		default:
-			config->chassis_speed_max = 6000.f * (1.2f - (float)uplift.back->rx_info.angle_sum/UPLIFT_MAX);
+			config->chassis_speed_max = 6000.f * (1.3f - (float)uplift.back->rx_info.angle_sum/UPLIFT_MAX);
 			if(CTRL_DOWN)
 				config->chassis_speed_max*=0.27f;
 				
@@ -433,19 +433,19 @@ void Chassis_Work_Normal(chassis_t *chassis)
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch2,-rc.base_info->ch3,rc.base_info->ch0,\
 																		rc.base_info->D.cnt,rc.base_info->A.cnt,\
 																		rc.base_info->S.cnt,rc.base_info->W.cnt,\
-																		rc.info->mouse_x_K/3.f,0);
+																		rc.info->mouse_x_K,0);
 					break;
 				case SILVER_ORE:
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch2,-rc.base_info->ch3,rc.base_info->ch0,\
 																		rc.base_info->D.cnt,rc.base_info->A.cnt,\
 																		rc.base_info->S.cnt,rc.base_info->W.cnt,\
-																		rc.info->mouse_x_K/3.f,0);
+																		rc.info->mouse_x_K,0);
 					break;
 				case GOLDEN_ORE:
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch2,-rc.base_info->ch3,rc.base_info->ch0,\
 																		rc.base_info->D.cnt,rc.base_info->A.cnt,\
 																		rc.base_info->S.cnt,rc.base_info->W.cnt,\
-																		rc.info->mouse_x_K/3.f,0);
+																		rc.info->mouse_x_K,0);
 					break;
 				case GROUND_ORE:
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch2,-rc.base_info->ch3,rc.base_info->ch0,\
@@ -457,7 +457,7 @@ void Chassis_Work_Normal(chassis_t *chassis)
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch2,-rc.base_info->ch3,rc.base_info->ch0,\
 																		rc.base_info->D.cnt,rc.base_info->A.cnt,\
 																		rc.base_info->S.cnt,rc.base_info->W.cnt,\
-																		rc.info->mouse_x_K/3.f,0);
+																		rc.info->mouse_x_K/2.f,0);
 					break;
 				case SAVE:
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch3,rc.base_info->ch2,rc.base_info->ch0,\

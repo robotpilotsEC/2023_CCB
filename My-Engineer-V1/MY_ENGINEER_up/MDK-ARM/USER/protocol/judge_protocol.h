@@ -251,6 +251,16 @@ typedef struct{
 	uint16_t client_plane;
 } ext_interact_id_t;
 
+typedef struct
+{
+	float x_speed;
+	float y_speed;
+	float z_speed;
+	float pitch_speed;
+	float yaw_speed;
+	float roll_speed;
+	
+}custom_controler_info_t;
 
 typedef struct {
 	std_frame_header_t							fream_header;				// 帧头信息
@@ -265,6 +275,8 @@ typedef struct {
 	ext_shoot_data_t								shoot_data;					// 0x0207
 	ext_bullet_remaining_t					bullet_remaining;		// 0x0208	
 	ext_rfid_status_t								rfid_status;				// 0x0209	
+	
+	custom_controler_info_t					custom_info;				//0x0302
 	
 	ext_interact_id_t								ids;								//与本机交互的机器人id
 	

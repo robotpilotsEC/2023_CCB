@@ -17,7 +17,7 @@
 /* Exported macro ------------------------------------------------------------*/
 
 //抬升：前负后正
-#define UPLIFT_MAX								(490000)
+#define UPLIFT_MAX								(600000)
 #define UPLIFT_GRO								(0)
 #define UPLIFT_GOLDEN							(0)
 #define UPLIFT_SILVER							(0)

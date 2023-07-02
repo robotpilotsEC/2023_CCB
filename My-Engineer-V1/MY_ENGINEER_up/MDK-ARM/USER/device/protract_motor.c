@@ -21,11 +21,11 @@ motor_t protract_motor =
 
 
 																						/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
-float protract_posit_pid_param[7] 	 		= {		0.4,		0,		0,			0,			0,				0,			 2000};
+float protract_posit_pid_param[7] 	 		= {		1,		0,		0,			0,			0,				0,			 2000};
 																						/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
-float protract_posit_in_pid_param[7] 		= {		10,		0.5,		0,			0,		4000,			2000,			 8000};
+float protract_posit_in_pid_param[7] 		= {		8,		0.1,		0,			0,		4000,			2000,			 10000};
 																						/*kp		ki		kd		d_err		int_max		iout_max		out_max*/
-float protract_speed_pid_param[7] 			= {		8,		0.1,		0,			0,		1500,			1500,			 2000};
+float protract_speed_pid_param[7] 			= {		8,		0.1,		0,			0,		1500,			1500,			 6000};
 
 
 
