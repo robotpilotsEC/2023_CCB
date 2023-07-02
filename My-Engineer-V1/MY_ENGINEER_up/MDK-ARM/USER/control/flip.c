@@ -78,6 +78,11 @@ void Flip_Work_Normal(flip_t *flip)
 **/
 void Flip_Work(flip_t *flip)
 {
+	if(flip->left->state.work_state&&flip->right->state.work_state)
+		flip->work_sate = MOTOR_OK;
+	else
+		flip->work_sate = MOTOR_NO;
+		
 	Flip_Work_Normal(flip);
 }
 

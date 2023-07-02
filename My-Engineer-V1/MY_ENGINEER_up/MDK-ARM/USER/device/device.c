@@ -62,6 +62,7 @@ void device_work(void)
 	protract.work(&protract);
 	transverse.work(&transverse);
 	pneumatic.work(&pneumatic);
+	
 	if(!RC_ONLINE)
 	{
 		for(uint16_t i=0;i<DEVICE_CNT;i++)

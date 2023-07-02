@@ -2,6 +2,7 @@
 #include "Pneumatic.h"
 #include "config.h"
 #include "string.h"
+#include "control.h"
 /* Exported variables --------------------------------------------------------*/
 
 pneumatic_t pneumatic = 
@@ -20,16 +21,19 @@ void pneumatic_init(pneumatic_t *pneumatic)
 
 void pneumatic_work(pneumatic_t *pneumatic)
 {
-	switch (pneumatic->pneu_state)
+	if(SYSTEM_RESET)
 	{
-		case ON:
-			pneumatic->pneu->ctrl(pneumatic->pneu,GPIO_PIN_SET);
-			break;
-		case OFF:
-			pneumatic->pneu->ctrl(pneumatic->pneu,GPIO_PIN_RESET);
-			break;
-		default:
-			break;
+		switch (pneumatic->pneu_state)
+		{
+			case ON:
+				pneumatic->pneu->ctrl(pneumatic->pneu,GPIO_PIN_SET);
+				break;
+			case OFF:
+				pneumatic->pneu->ctrl(pneumatic->pneu,GPIO_PIN_RESET);
+				break;
+			default:
+				break;
+		}
 	}
 }
 

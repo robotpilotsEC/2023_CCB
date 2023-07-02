@@ -26,6 +26,9 @@ uint8_t reset_step = 0;
 uint8_t reset_step1 = 0;
 void system_reset(void)
 {
+	if(flip.work_sate&&protract.work_sate&&sucker.work_sate&&transverse.work_sate == 0)
+		control.master_reset = DEV_RESET_OK;
+	
 	if(!SYSTEM_RESET&&RC_ONLINE)
 	{
 		flip.mode = FLIP_UP;

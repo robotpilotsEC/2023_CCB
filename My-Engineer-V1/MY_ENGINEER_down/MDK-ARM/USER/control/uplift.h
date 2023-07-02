@@ -31,18 +31,6 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** 
-  * @brief  抬升状态枚举
-  */ 
-typedef enum 
-{
-	UPLIFT_OFFLINE = 0,	
-	
-	UPLIFT_ONLINE,
-
-}uplift_work_state_e;
-
-
-/** 
   * @brief  抬升基本信息定义
   */ 
 typedef __packed struct 
@@ -67,7 +55,7 @@ typedef struct uplift_class_t
 	
 	
 	uplift_base_info_t   	base_info;
-	uplift_work_state_e   work_sate;
+	motor_state_e   			work_sate;
 	
 	void                (*work)(struct uplift_class_t *uplift);
 	

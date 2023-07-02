@@ -127,6 +127,12 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 **/
 void Sucker_Work(sucker_t *sucker)
 {
+	if(sucker->deffL->state.work_state&&sucker->deffR->state.work_state&&sucker->yaw->state.work_state)
+		sucker->work_sate = MOTOR_OK;//
+	else 
+		sucker->work_sate = MOTOR_NO;//
+		
+	
 	sucker->base_info.measure_pitch_angle = (sucker->deffR->rx_info.angle_sum - sucker->deffL->rx_info.angle_sum)/2.f;
 	sucker->base_info.measure_pitch_speed = (sucker->deffR->rx_info.speed - sucker->deffL->rx_info.speed)/2.f;
 	sucker->base_info.measure_roll_angle = (sucker->deffL->rx_info.angle_sum + sucker->deffR->rx_info.angle_sum)/2.f;
@@ -145,7 +151,7 @@ void Sucker_Work(sucker_t *sucker)
 			sucker->base_info.roll_A2D += 360;
 	}
 
-	if(SYSTEM_RESET)
+	if(SYSTEM_RESET&&sucker->work_sate)
 		Sucker_Work_Normal(sucker);			
 }
 

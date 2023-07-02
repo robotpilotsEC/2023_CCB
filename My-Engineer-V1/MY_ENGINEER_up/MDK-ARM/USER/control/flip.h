@@ -24,18 +24,6 @@
   */ 
 typedef enum 
 {
-	FLIP_OFFLINE = 0,	
-	
-	FLIP_ONLINE,
-
-}flip_work_state_e;
-
-
-/** 
-  * @brief  ·­¿ó×´Ì¬Ã¶¾Ù
-  */ 
-typedef enum 
-{
 	FLIP_OFF = 0,	
 	
 	FLIP_DOWM,
@@ -70,7 +58,7 @@ typedef struct flip_class_t
 	
 	
 	flip_base_info_t   	base_info;
-	flip_work_state_e   work_sate;
+	motor_state_e  			work_sate;
 	flip_work_mdoe_e    mode;
 	
 	void                (*work)(struct flip_class_t *flip);

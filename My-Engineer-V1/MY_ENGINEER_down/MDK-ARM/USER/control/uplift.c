@@ -128,8 +128,12 @@ Dev_Reset_State_e Uplift_Work_Init(uplift_t *uplift)
 **/
 void Uplift_Work(uplift_t *uplift)
 {
+	if(uplift->front->state.work_state&&uplift->back->state.work_state)
+		uplift->work_sate = MOTOR_OK;
+	else
+		uplift->work_sate = MOTOR_NO;
 	
-	if(SYSTEM_RESET)
+	if(SYSTEM_RESET&&uplift->work_sate)
 	{
 		uplift->base_info.target = communicate_rx_info.uplift_target;
 		Uplift_Work_Normal(uplift);

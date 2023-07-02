@@ -15,6 +15,9 @@ control_t control = {
  */
 void system_reset(void)
 {
+	if(!uplift.work_sate)
+		control.slaver_reset = DEV_RESET_OK;
+	
 	if(!SYSTEM_RESET&&RC_ONLINE)
 	{
 		rescue.reset = Rescue_Work_Init(&rescue);

@@ -36,6 +36,7 @@ typedef enum{
 
 typedef struct{
 	motor_t						*motor;
+	motor_state_e   	work_sate;
 }device_t;
 
 

@@ -249,14 +249,11 @@ void Chassis_Speed_Calculating(chassis_t *chassis, int16_t *front, int16_t *righ
 		Chassis_Speed_Limit(chassis,front, right, cycle);
 	}
 	
-	
-	
 	if(car.mode_switch==SAVE&&*cycle!=0)
 		cycle_save = 8000*(*cycle)/config->chassis_speed_max;
 	else
 		cycle_save = 0;
 		
-	
 	chassis->base_info.output.motor_LF_speed   = (  *front + *right + *cycle) - cycle_save;
 	chassis->base_info.output.motor_RF_speed   = (- *front + *right + *cycle) - cycle_save;
 	chassis->base_info.output.motor_LB_speed   = (  *front - *right + *cycle) + cycle_save;

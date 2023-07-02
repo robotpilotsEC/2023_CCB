@@ -42,19 +42,6 @@
 
 /* Exported types ------------------------------------------------------------*/
 /** 
-  * @brief  平移状态枚举
-  */ 
-typedef enum 
-{
-	PROTRACT_OFFLINE = 0,	
-	
-	PROTRACT_ONLINE,
-
-}protract_work_state_e;
-
-
-
-/** 
   * @brief  平移基本信息定义
   */ 
 typedef __packed struct 
@@ -79,7 +66,7 @@ typedef struct protract_class_t
 	
 	
 	protract_base_info_t   	base_info;
-	protract_work_state_e   work_sate;
+	motor_state_e   work_sate;
 	
 	void                (*work)(struct protract_class_t *protract);
 	

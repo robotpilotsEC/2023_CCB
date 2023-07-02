@@ -108,12 +108,17 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 **/
 void Protract_Work(protract_t *protract)
 {
+	if(protract->motor->state.work_state)
+		protract->work_sate = MOTOR_OK;
+	else
+		protract->work_sate = MOTOR_NO;
+	
 	protract->base_info.measure_angle = protract->motor->rx_info.angle_sum;
 	protract->base_info.angle2mm = protract->motor->rx_info.angle_sum*PROTRACT_A2MM;
 	protract->base_info.measure_speed = protract->motor->rx_info.speed;
 	
-	if (SYSTEM_RESET)
-			Protract_Work_Normal(protract);
+	if(SYSTEM_RESET&&protract->work_sate)
+		Protract_Work_Normal(protract);
 }
 
 

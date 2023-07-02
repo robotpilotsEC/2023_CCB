@@ -850,14 +850,15 @@ ARM Macro Assembler    Page 14
 
 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=my_engineer\startup_stm32f407xx.d -omy_engineer\startup_stm32f4
-07xx.o -I..\Core\Inc -ID:\RP\ENGINEER_2023\My-Engineer-V1\MY_ENGINEER_up\MDK-AR
-M\RTE -IC:\Users\86134\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Inclu
-de -IC:\Users\86134\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\DSP\Include -
-IC:\Users\86134\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\1.0.8\Device\Include
- --predefine="__UVISION_VERSION SETA 514" --predefine="_RTE_ SETA 1" --list=sta
-rtup_stm32f407xx.lst startup_stm32f407xx.s
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp.sp --apcs=
+interwork --depend=my_engineer\startup_stm32f407xx.d -omy_engineer\startup_stm3
+2f407xx.o -I..\Core\Inc -I.\RTE\_MY_ENGINEER -IC:\Users\86134\AppData\Local\Arm
+\Packs\ARM\CMSIS\5.9.0\CMSIS\Core\Include -IC:\Users\86134\AppData\Local\Arm\Pa
+cks\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -IC:\Us
+ers\86134\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Device\Include --pr
+edefine="__UVISION_VERSION SETA 538" --predefine="_RTE_ SETA 1" --predefine="ST
+M32F407xx SETA 1" --predefine="_RTE_ SETA 1" --list=startup_stm32f407xx.lst sta
+rtup_stm32f407xx.s
 
 
 
@@ -1961,4 +1962,4 @@ Symbol: __use_two_region_memory
       None
 Comment: __use_two_region_memory unused
 3 symbols
-447 symbols in table
+448 symbols in table

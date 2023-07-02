@@ -122,7 +122,7 @@ typedef struct sucker_class_t
 	
 	
 	sucker_base_info_t   	base_info;
-	sucker_work_state_e   work_sate;
+	motor_state_e   		work_sate;
 	
 	void                (*work)(struct sucker_class_t *sucker);
 	
