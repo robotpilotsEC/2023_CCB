@@ -17,6 +17,8 @@
 #include "Pneumatic.h"
 #include "remote.h"
 
+#define DEVICE_ALLRIGHT (flip.work_sate&&protract.work_sate&&sucker.work_sate&&transverse.work_sate)
+
 typedef enum{
 	DEVICE_01,
 	DEVICE_02,

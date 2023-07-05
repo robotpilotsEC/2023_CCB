@@ -10,7 +10,7 @@
 
 #include "config.h"
 
-#define	VIA_POINT_STEP				(20.f)
+#define	VIA_POINT_STEP				(10.f)
 
 typedef enum	CAR_INIT_CONFIG
 {

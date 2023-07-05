@@ -68,12 +68,12 @@ typedef enum
 typedef enum 
 {
   NORMAL = 0,					//常规模式
-	LOB,								//空接模式
-	SAVE,								//救援模式
-	SILVER_ORE,					//银矿模式
-	GOLDEN_ORE,					//金矿模式
-	GROUND_ORE,					//地矿模式
-	EXCHANGE_ORE,				//兑换模式  
+	LOB,								//空接模式	1
+	SAVE,								//救援模式	2
+	SILVER_ORE,					//银矿模式	3
+	GOLDEN_ORE,					//金矿模式	4
+	GROUND_ORE,					//地矿模式	5
+	EXCHANGE_ORE,				//兑换模式  6
 	CCB_MODE,
 }car_mode_e;
 

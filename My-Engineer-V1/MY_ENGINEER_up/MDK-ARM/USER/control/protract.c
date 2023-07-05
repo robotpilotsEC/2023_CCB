@@ -66,7 +66,7 @@ float protract_time_cnt=0;
 float pro_speed = 2000.f;
 Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 {
-	if(!protract->reset&&!SYSTEM_RESET)
+	if(!protract->reset&&!SYSTEM_RESET&&protract->work_sate)
 	{
 		protract->base_info.output = protract->motor->c_speed(protract->motor, -pro_speed);
 		protract->motor->base_info.motor_out = protract->base_info.output;
@@ -88,11 +88,13 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 		else
 			return DEV_RESET_NO;
 	}
-	else if(protract->reset&&!SYSTEM_RESET)
+	else if(protract->reset&&!SYSTEM_RESET&&protract->work_sate)
 	{
 		Protract_Work_Normal(protract);
 		return DEV_RESET_OK;	
 	}
+	else if(!protract->work_sate)
+		return DEV_RESET_OK;	
 	else
 		return protract->reset;	
 		
@@ -109,9 +111,9 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 void Protract_Work(protract_t *protract)
 {
 	if(protract->motor->state.work_state)
-		protract->work_sate = MOTOR_OK;
+		protract->work_sate = M_ONLINE;
 	else
-		protract->work_sate = MOTOR_NO;
+		protract->work_sate = M_OFFLINE;
 	
 	protract->base_info.measure_angle = protract->motor->rx_info.angle_sum;
 	protract->base_info.angle2mm = protract->motor->rx_info.angle_sum*PROTRACT_A2MM;

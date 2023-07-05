@@ -74,7 +74,7 @@ float sucker_time_cnt1=0;
 float sucker_speed = 1500.f;
 Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 {
-	if(!sucker->reset&&!SYSTEM_RESET)
+	if(!sucker->reset&&!SYSTEM_RESET&&sucker->work_sate)
 	{
 		sucker->base_info.output_deffL = sucker->deffL->c_speed(sucker->deffL, sucker_speed);
 		sucker->deffL->base_info.motor_out = sucker->base_info.output_deffL;
@@ -108,11 +108,13 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 		else
 			return DEV_RESET_NO;
 	}
-	else if(sucker->reset&&!SYSTEM_RESET)
+	else if(sucker->reset&&!SYSTEM_RESET&&sucker->work_sate)
 	{
 		Sucker_Work_Normal(sucker);
 		return DEV_RESET_OK;	
 	}
+	else if(!sucker->work_sate)
+		return DEV_RESET_OK;
 	else
 		return sucker->reset;	
 }
@@ -128,9 +130,9 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 void Sucker_Work(sucker_t *sucker)
 {
 	if(sucker->deffL->state.work_state&&sucker->deffR->state.work_state&&sucker->yaw->state.work_state)
-		sucker->work_sate = MOTOR_OK;//
+		sucker->work_sate = M_ONLINE;//
 	else 
-		sucker->work_sate = MOTOR_NO;//
+		sucker->work_sate = M_OFFLINE;//
 		
 	
 	sucker->base_info.measure_pitch_angle = (sucker->deffR->rx_info.angle_sum - sucker->deffL->rx_info.angle_sum)/2.f;

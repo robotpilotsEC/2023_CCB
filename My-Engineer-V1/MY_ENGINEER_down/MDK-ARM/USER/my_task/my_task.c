@@ -32,7 +32,7 @@ void StartRealTimeTask(void const * argument)
 	for(;;)
   {
 //		time1 = micros();
-		HAL_IWDG_Refresh(&hiwdg);
+//		HAL_IWDG_Refresh(&hiwdg);
 		imu.update(&imu);	
 		communicate_data_tx();
 //		time2 = micros();

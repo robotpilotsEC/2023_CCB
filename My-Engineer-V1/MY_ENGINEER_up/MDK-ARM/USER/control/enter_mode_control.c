@@ -35,12 +35,13 @@ void enter_normal_mode(void)
 					pneumatic.pneu_state = OFF;
 					protract.base_info.target = PROTRACT_MID;
 					rescue.target = RESCUE_MIN;
+					sucker.base_info.target_roll = 0;
 					if(PROTRACT_MID_OK)
 						car.step ++;
 					break;
 				case 2:
 					if(SUCKER_YAW_MINI_OK&&SUCKER_PITCH_MID_OK)
-						car.step ++;
+						car.step = 4;
 					else
 					{
 						if(uplift.measure_angle<UPLIFT_INTERFERE)
@@ -65,14 +66,17 @@ void enter_normal_mode(void)
 				case 4:
 					transverse.base_info.target = TRANSVERSE_MIN;
 					if(car.ore_num == 0)
-						uplift.target = UPLIFT_ONE_ORE;
+					{
+						uplift.target = UPLIFT_MIN;
+						if(UPLIFT_MINI_OK&&TRANSVERSE_MINI_OK)
+							car.step ++;
+					}
 					else if(car.ore_num == 1)
 						uplift.target = UPLIFT_ONE_ORE;
 					else if(car.ore_num == 2)
 						uplift.target = UPLIFT_ONE_ORE;
 					if(OTT_UPLIFT_IS_OK&&TRANSVERSE_MINI_OK)
 						car.step ++;
-						
 					break;
 				case 5:
 					gimbal.target_pitch = GIMBAL_PITCH_MAX;
@@ -81,7 +85,7 @@ void enter_normal_mode(void)
 						car.step ++;
 					break;
 				case 6:
-					if(RESCUE_MINI_OK)
+//					if(RESCUE_MINI_OK)
 						car.step ++;
 				break;
 				case 7:
@@ -736,6 +740,7 @@ void enter_exchange_mode(void)
 				break;
 				case 10:
 					car.step_lock = 0;
+					sucker.base_info.target_roll = 0;
 					sucker.base_info.target_pitch = SUCKER_PITCH_MID;
 					sucker.base_info.target_yaw = SUCKER_YAW_MIN;
 					if(SUCKER_PITCH_MID_OK&&SUCKER_YAW_MINI_OK)

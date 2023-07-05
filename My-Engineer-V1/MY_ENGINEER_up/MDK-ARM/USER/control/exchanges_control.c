@@ -121,7 +121,7 @@ void Via_Point_Create(auto_info_t *Auto)
 	
 	//在步长VIA_POINT_STEP，方向unit->x/y/z上生成通过点
 	info->x_via = info->x_end+unit->x*VIA_POINT_STEP;
-	info->y_via = info->y_end+unit->y*VIA_POINT_STEP;
+	info->y_via = info->y_end-unit->y*VIA_POINT_STEP;/////
 	info->z_via = info->z_end+unit->z*VIA_POINT_STEP;
 	
 }
@@ -134,11 +134,11 @@ void Via_Point_Create(auto_info_t *Auto)
   * @author  ccb
   * @Date    
 **/
-float car_d0 = 33.f;
-float link_d = 12.f;
-float link_L = 16.f;
-float link_r = 14.f;
-float ccb11 = 125000.f;
+float car_d0 = 33.f;//前伸原长
+float link_d = 12.f;//横移杆
+float link_L = 16.f;//yaw杆
+float link_r = 14.f;//pitch杆+0.5矿边长
+float ccb11 = 125000.f;//相机高
 float ccb22 = 0.f;
 void Via_Point_Check(auto_info_t *Auto)
 {
@@ -150,12 +150,13 @@ void Via_Point_Check(auto_info_t *Auto)
 	if(config->detph_OK==AUTO_OK)
 	{
 		//通过点转电机目标值判断是否越界
-		via_motor->x = ((vision_rx_info.x_ore-info->x_via)-(car_d0+link_d+(link_L+link_r*arm_cos_f32(d2r_f32(vision_rx_info.pitch_ore)))*arm_cos_f32(d2r_f32(vision_rx_info.yaw_ore))))/TRANSVERSE_A2CM;
-		via_motor->y = PROTRACT_MAX+((link_L+link_r*arm_cos_f32(d2r_f32(vision_rx_info.pitch_ore)))*arm_sin_f32(d2r_f32(vision_rx_info.yaw_ore)))+info->y_via/PROTRACT_A2CM;//
-		via_motor->z = (info->z_via+link_r*arm_sin_f32(d2r_f32(vision_rx_info.pitch_ore)))/UPLIFT_A2CM+ccb11;//-FRONT_Z_OFFSET*arm_cos_f32(info->pitch-pi/2.f)
-		via_motor->pitch = (90.f-vision_rx_info.pitch_ore+ccb22)*SUCKER_PITCH_D2A;
-		via_motor->yaw = (180.f+r2d_f32(info->yaw))*SUCKER_YAW_D2A;
-		via_motor->roll = -info->roll*SUCKER_ROLL_D2A;
+		via_motor->x = (vision_rx_info.x_ore-info->x_via-(link_r*arm_cos_f32(d2r_f32(vision_rx_info.pitch_ore))+link_L)*arm_cos_f32(d2r_f32(vision_rx_info.yaw_ore))-link_d-car_d0)/TRANSVERSE_A2CM;
+		via_motor->y = 400000.f-(info->y_via-c_sign(vision_rx_info.yaw_ore)*(link_L+link_r)*arm_cos_f32(d2r_f32(90.f-c_abs(vision_rx_info.yaw_ore))))/PROTRACT_A2CM;
+		via_motor->z = (info->z_via+link_r*arm_sin_f32(d2r_f32(c_abs(vision_rx_info.pitch_ore))))/UPLIFT_A2CM+ccb11;
+		via_motor->pitch = (90.f-vision_rx_info.pitch_ore)*SUCKER_PITCH_D2A;
+		via_motor->yaw = (180.f+vision_rx_info.yaw_ore)*SUCKER_YAW_D2A;
+		via_motor->roll = -vision_rx_info.roll_ore*SUCKER_ROLL_D2A/2.f;
+		
 		if(range(via_motor->x,TRANSVERSE_MIN,TRANSVERSE_MAX) && \
 			 range(via_motor->y,PROTRACT_MIN,PROTRACT_MAX) &&\
 			 range(via_motor->z,UPLIFT_MIN,UPLIFT_MAX)&&\
@@ -188,32 +189,35 @@ void Via_Point_Work(auto_info_t *Auto)
 		switch(Auto->step)
 		{
 			case 1:
-				sucker.base_info.target_pitch = via_motor->pitch;
 				sucker.base_info.target_roll = via_motor->roll;
 				sucker.base_info.target_yaw = via_motor->yaw;
-				if(distance(sucker.base_info.measure_pitch_angle,via_motor->pitch)<3000&&m_abs(sucker.base_info.measure_pitch_speed<100)\
-					&&distance(sucker.base_info.measure_roll_angle,via_motor->roll)<3000&&m_abs(sucker.base_info.measure_roll_speed<100)\
+				if(distance(sucker.base_info.measure_roll_angle,via_motor->roll)<3000&&m_abs(sucker.base_info.measure_roll_speed<100)\
 					&&distance(sucker.base_info.measure_yaw_angle,via_motor->yaw)<3000&&m_abs(sucker.base_info.measure_yaw_speed<100))
 						Auto->step ++;
 				break;
 			case 2:
 				uplift.target = via_motor->z;
-				transverse.base_info.target = via_motor->x;
 				protract.base_info.target = via_motor->y;
 				if(distance(uplift.measure_angle,via_motor->z)<2000&&m_abs(uplift.measure_speed<10)\
-					&&distance(transverse.base_info.measure_angle,via_motor->x)<2000&&m_abs(transverse.base_info.measure_speed<10)\
 					&&distance(protract.base_info.measure_angle,via_motor->y)<2000&&m_abs(protract.base_info.measure_speed<10))
 						Auto->step ++;
 				break;
 			case 3:
-				config->via_process_done = AUTO_OK;
-				config->start_exchange_flag = AUTO_NO;
+						Auto->step ++;
 				break;
 			case 4:
+				sucker.base_info.target_pitch = via_motor->pitch;
+				if(distance(sucker.base_info.measure_pitch_angle,via_motor->pitch)<3000&&m_abs(sucker.base_info.measure_pitch_speed<100))
+						Auto->step ++;
 				break;
 			case 5:
+				transverse.base_info.target = via_motor->x;
+				if(distance(transverse.base_info.measure_angle,via_motor->x)<2000&&m_abs(transverse.base_info.measure_speed<10))
+						Auto->step ++;
 				break;
 			case 6:
+				config->via_process_done = AUTO_OK;
+				config->start_exchange_flag = AUTO_NO;
 				break;
 			default:
 				break;
@@ -239,14 +243,14 @@ void Via_Point_Achieve(auto_info_t *Auto)
 		if(config->target_OK==AUTO_NO)
 		{
 			/*车不能靠太近*/
-			if(vision_rx_info.x_ore>=98.f)
+			if(vision_rx_info.x_ore>=85.f)
 				config->detph_OK = AUTO_OK;
 			else
 				config->detph_OK = AUTO_NO;
 				
 			Auto->step = 1;
 			info->x_end = 0.f;
-			info->y_end = vision_rx_info.y_ore;
+			info->y_end = -vision_rx_info.y_ore;
 			info->z_end = vision_rx_info.z_ore;
 			info->pitch = vision_rx_info.pitch_ore;
 			info->yaw = vision_rx_info.yaw_ore;

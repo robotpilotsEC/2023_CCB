@@ -106,7 +106,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_UART4_Init();
   MX_USART6_UART_Init();
-  MX_IWDG_Init();
+//  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
 	device_init();
 	drive_init();

@@ -59,8 +59,6 @@ typedef enum
 	M_INIT_ERR,	
 	M_DATA_ERR,
 	
-	MOTOR_OK,
-	MOTOR_NO,
 }motor_state_e;//电机状态，失联为最高优先级
 
 typedef enum{

@@ -20,6 +20,7 @@ typedef struct
 {
 	Dev_Reset_State_e				 	master_reset;	//主板复位标志
 	Dev_Reset_State_e					slaver_reset;	//从板复位标志
+	uint8_t										reset_step;
 }control_t;
 
 

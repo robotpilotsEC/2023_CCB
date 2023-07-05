@@ -62,7 +62,7 @@ float Transverse_time_cnt=0;
 float	tra_speed = 2000.f;
 Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 {
-	if(!transverse->reset&&!SYSTEM_RESET)
+	if(!transverse->reset&&!SYSTEM_RESET&&transverse->work_sate)
 	{
 		transverse->base_info.output_F = transverse->front->c_speed(transverse->front, -tra_speed);
 		transverse->base_info.output_B = transverse->back->c_speed(transverse->back, tra_speed);
@@ -73,15 +73,16 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 		
 		if(distance(transverse->front->rx_info.angle_prev,transverse->front->rx_info.angle)<20\
 			 && distance(transverse->back->rx_info.angle_prev,transverse->back->rx_info.angle)<20\
+			 && m_abs(transverse->front->rx_info.speed == 0)\
 			 && m_abs(transverse->back->rx_info.speed == 0))
 			Transverse_time_cnt++;
 		else
 			Transverse_time_cnt = 0;
 		
-		if(Transverse_time_cnt>50)
+		if(Transverse_time_cnt>500)
 		{
 			transverse->front->rx_info.angle_prev = transverse->front->rx_info.angle;
-			transverse->back->rx_info.angle_prev = transverse->front->rx_info.angle;
+			transverse->back->rx_info.angle_prev = transverse->back->rx_info.angle;
 			transverse->front->rx_info.angle_sum = 0;
 			transverse->back->rx_info.angle_sum = 0;
 			
@@ -91,11 +92,13 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 		else
 			return DEV_RESET_NO;
 	}
-	else if(transverse->reset&&!SYSTEM_RESET)
+	else if(transverse->reset&&!SYSTEM_RESET&&transverse->work_sate)
 	{
 		Transverse_Work_Normal(transverse);
 		return DEV_RESET_OK;	
 	}
+	else if(!transverse->work_sate)
+		return DEV_RESET_OK;	
 	else
 		return transverse->reset;	
 		
@@ -112,9 +115,9 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 void Transverse_Work(transverse_t *transverse)
 {
 	if(transverse->front->state.work_state&&transverse->back->state.work_state)
-		transverse->work_sate = MOTOR_OK;
+		transverse->work_sate = M_ONLINE;
 	else 
-		transverse->work_sate = MOTOR_NO;
+		transverse->work_sate = M_OFFLINE;
 		
 	transverse->base_info.measure_angle = transverse->front->rx_info.angle_sum;
 	transverse->base_info.angle2mm = transverse->front->rx_info.angle_sum*TRANSVERSE_A2MM;

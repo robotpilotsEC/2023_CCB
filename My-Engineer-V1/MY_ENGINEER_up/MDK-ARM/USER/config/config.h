@@ -11,6 +11,7 @@
 
 #include "stm32f4xx_hal.h"
 
+#define c_sign(x)										((x>=0)?(1):(-1))//·ûºÅ
 #define constrain(x, min, max)			((x>(max))?max:(x<(min)?min:(x)))//ÏÞ·ù
 #define range(x, min, max)					((((x)<(max)) && ((x)>(min)))?1:0)//·¶Î§
 #define c_abs(x) 										((x)>0? (x):(-(x)))//¾ø¶ÔÖµ

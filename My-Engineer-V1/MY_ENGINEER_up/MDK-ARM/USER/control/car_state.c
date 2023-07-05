@@ -7,7 +7,7 @@
   */
 	
 	
-	
+#include "device.h"
 #include "control.h"
 #include "car_state.h"
 #include "exchanges_control.h"
@@ -87,7 +87,7 @@ void car_mode_commond_update(car_t *car)
 uint32_t switch_time_cnt;
 void car_mode_enter(car_t *car)
 {
-	if(SYSTEM_RESET&&KEY_CTRL)
+	if(SYSTEM_RESET&&KEY_CTRL&&DEVICE_ALLRIGHT)
 	{
 		switch (car->mode_switch)
 		{

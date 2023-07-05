@@ -48,7 +48,7 @@ void StartRealTimeTask(void const * argument)
   {
 		rc_ctrl(&rc);
 		communicate_data_tx();
-		HAL_IWDG_Refresh(&hiwdg);
+//		HAL_IWDG_Refresh(&hiwdg);
 		check_judge_offline(&judge);
     osDelay(1);
   }

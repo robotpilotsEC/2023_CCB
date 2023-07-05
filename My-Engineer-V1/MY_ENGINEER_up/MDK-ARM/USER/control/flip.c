@@ -79,9 +79,9 @@ void Flip_Work_Normal(flip_t *flip)
 void Flip_Work(flip_t *flip)
 {
 	if(flip->left->state.work_state&&flip->right->state.work_state)
-		flip->work_sate = MOTOR_OK;
+		flip->work_sate = M_ONLINE;
 	else
-		flip->work_sate = MOTOR_NO;
+		flip->work_sate = M_OFFLINE;
 		
 	Flip_Work_Normal(flip);
 }
