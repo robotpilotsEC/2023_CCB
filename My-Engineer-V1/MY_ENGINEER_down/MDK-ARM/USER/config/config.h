@@ -27,7 +27,7 @@ typedef enum DEV_WORK_STATE
 
 typedef enum DEV_RESET_STATE
 {
-	DEV_RESET_NO,
+	DEV_RESET_NO = 0,
 	DEV_RESET_OK,
 }Dev_Reset_State_e;
 

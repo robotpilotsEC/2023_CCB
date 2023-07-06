@@ -133,7 +133,7 @@ void Uplift_Work(uplift_t *uplift)
 	else
 		uplift->work_sate = MOTOR_NO;
 	
-	if(SYSTEM_RESET&&uplift->work_sate)
+	if(SYSTEM_RESET)
 	{
 		uplift->base_info.target = communicate_rx_info.uplift_target;
 		Uplift_Work_Normal(uplift);

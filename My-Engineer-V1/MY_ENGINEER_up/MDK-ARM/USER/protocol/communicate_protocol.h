@@ -52,6 +52,7 @@ typedef __packed struct
 	uint8_t									is_uplift_start_reset;
 	uint8_t									is_gimbal_start_reset;
 	uint8_t									is_rescue_start_reset;
+	uint8_t									is_all_device_ok;
 
 	uint16_t CRC16;
 }communicate_tx_info_t;

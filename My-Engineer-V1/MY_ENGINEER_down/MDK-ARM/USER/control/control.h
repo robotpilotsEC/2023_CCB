@@ -11,6 +11,7 @@
 
 #define RC_ONLINE 	 		(rc.info->status == DEV_ONLINE)
 #define SYSTEM_RESET 		(control.master_reset == DEV_RESET_OK)
+#define ALL_DEVICE_OK		(communicate_rx_info.is_all_device_ok == 1)
 
 typedef struct 
 {

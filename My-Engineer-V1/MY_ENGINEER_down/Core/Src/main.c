@@ -33,6 +33,7 @@
 #include "bmi2_defs.h"
 #include "bmi.h"
 #include "device.h"
+#include "chassis.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +65,8 @@ int16_t rs = 0;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t rslt;
+uint8_t imu_rslt;
+float rslt_time = 0;
 /* USER CODE END 0 */
 
 /**
@@ -92,10 +94,18 @@ int main(void)
   /* USER CODE BEGIN SysInit */
 //	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_RESET);
 //	HAL_Delay(500);
-//	rslt = BMI_Init();
-//	while(rslt!=BMI2_OK)
+//	imu_rslt = BMI_Init();
+//	while(imu_rslt!=BMI2_OK)
 //	{
-//		rslt = BMI_Init();
+//		imu_rslt = BMI_Init();
+//		rslt_time ++;
+//		if(rslt_time>5000)
+//		{
+//			chassis.work_info.chassis_imu_init_flag = 0;
+//			break;
+//		}
+//		else
+//			chassis.work_info.chassis_imu_init_flag = 1;
 //	}
   /* USER CODE END SysInit */
 
@@ -103,10 +113,18 @@ int main(void)
   MX_GPIO_Init();
 	HAL_GPIO_WritePin(GPIOB,GPIO_PIN_14,GPIO_PIN_RESET);
 	HAL_Delay(500);
-	rslt = BMI_Init();
-	while(rslt!=BMI2_OK)
+	imu_rslt = BMI_Init();
+	while(imu_rslt!=BMI2_OK)
 	{
-		rslt = BMI_Init();
+		imu_rslt = BMI_Init();
+		rslt_time ++;
+		if(rslt_time>5000)
+		{
+			chassis.work_info.chassis_imu_init_flag = 0;
+			break;
+		}
+		else
+			chassis.work_info.chassis_imu_init_flag = 1;
 	}
   MX_DMA_Init();
   MX_CAN1_Init();
@@ -117,6 +135,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_UART5_Init();
   MX_USART6_UART_Init();
+//  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
 	device_init();	
 	USART1_Init();

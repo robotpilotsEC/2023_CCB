@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx,USE_STDPERIPH_DRIVER,ARM_MATH_CM4,__FPU_PRESENT = 1U,__CC_ARM,__TARGET_FPU_VFP</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc;  ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;  ../Middlewares/Third_Party/FreeRTOS/Source/include;  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;  ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;  ../Drivers/CMSIS/Include;  .\USER\Alog;  .\USER\config;  .\USER\control;  .\USER\device;  .\USER\drive;  .\USER\motor;  .\USER\my_task;  .\USER\protocol;  .\USER\device\Imu;  ..\Drivers\CMSIS\DSP\Include;  .\USER\protocol\crc;  .\USER\Alog\support;  .\USER\cmsis</IncludePath>
+              <IncludePath>../Core/Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc;   ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;   ../Middlewares/Third_Party/FreeRTOS/Source/include;   ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;   ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F;   ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;   ../Drivers/CMSIS/Include;   .\USER\Alog;   .\USER\config;   .\USER\control;   .\USER\device;   .\USER\drive;   .\USER\motor;   .\USER\my_task;   .\USER\protocol;   .\USER\device\Imu;   ..\Drivers\CMSIS\DSP\Include;   .\USER\protocol\crc;   .\USER\Alog\support;   .\USER\cmsis</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

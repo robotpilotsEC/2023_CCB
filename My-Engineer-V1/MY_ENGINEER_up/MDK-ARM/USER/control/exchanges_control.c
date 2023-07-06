@@ -54,7 +54,7 @@ void Automatic_Exchange(auto_info_t *Auto)
 	if(config->start_exchange_flag)
 	{
 		Via_Point_Achieve(Auto);
-//		Final_Path_Achieve(Auto);
+		Final_Path_Achieve(Auto);
 	}
 	else
 	{
@@ -69,23 +69,10 @@ void Automatic_Exchange(auto_info_t *Auto)
 	
 	if(config->all_process_done==AUTO_OK)
 	{
+		config->key_dowm2 = AUTO_NO;
 		config->via_process_done = AUTO_NO;
 		config->start_exchange_flag=AUTO_NO;
 	}
-}
-
-/**
-  * @Name    Manual_Exchange
-  * @brief   手动兑换
-  * @param   
-  * @retval 
-  * @author  ccb
-  * @Date    
-**/
-void Manual_Exchange(void)
-{
-	car.mode_ctrl = car.mode_switch;
-	car.step = 1;
 }
 
 /**
@@ -139,7 +126,7 @@ float link_d = 12.f;//横移杆
 float link_L = 16.f;//yaw杆
 float link_r = 14.f;//pitch杆+0.5矿边长
 float ccb11 = 125000.f;//相机高
-float ccb22 = 0.f;
+float ccb22 = 115000.f;
 void Via_Point_Check(auto_info_t *Auto)
 {
 	auto_config_info_t 		*config 		= 	Auto->config;
@@ -150,10 +137,13 @@ void Via_Point_Check(auto_info_t *Auto)
 	if(config->detph_OK==AUTO_OK)
 	{
 		//通过点转电机目标值判断是否越界
-		via_motor->x = (vision_rx_info.x_ore-info->x_via-(link_r*arm_cos_f32(d2r_f32(vision_rx_info.pitch_ore))+link_L)*arm_cos_f32(d2r_f32(vision_rx_info.yaw_ore))-link_d-car_d0)/TRANSVERSE_A2CM;
-		via_motor->y = 400000.f-(info->y_via-c_sign(vision_rx_info.yaw_ore)*(link_L+link_r)*arm_cos_f32(d2r_f32(90.f-c_abs(vision_rx_info.yaw_ore))))/PROTRACT_A2CM;
+		via_motor->x = (vision_rx_info.x_ore-info->x_via-\
+										(link_r*arm_cos_f32(d2r_f32(vision_rx_info.pitch_ore))+link_L)\
+										*arm_cos_f32(d2r_f32(vision_rx_info.yaw_ore))-link_d-car_d0)/TRANSVERSE_A2CM;
+		via_motor->y = 400000.f-(info->y_via-c_sign(vision_rx_info.yaw_ore)\
+										*(link_L+link_r)*arm_cos_f32(d2r_f32(90.f-c_abs(vision_rx_info.yaw_ore))))/PROTRACT_A2CM;
 		via_motor->z = (info->z_via+link_r*arm_sin_f32(d2r_f32(c_abs(vision_rx_info.pitch_ore))))/UPLIFT_A2CM+ccb11;
-		via_motor->pitch = (90.f-vision_rx_info.pitch_ore)*SUCKER_PITCH_D2A;
+		via_motor->pitch = ccb22-vision_rx_info.pitch_ore*SUCKER_PITCH_D2A;
 		via_motor->yaw = (180.f+vision_rx_info.yaw_ore)*SUCKER_YAW_D2A;
 		via_motor->roll = -vision_rx_info.roll_ore*SUCKER_ROLL_D2A/2.f;
 		
@@ -217,7 +207,7 @@ void Via_Point_Work(auto_info_t *Auto)
 				break;
 			case 6:
 				config->via_process_done = AUTO_OK;
-				config->start_exchange_flag = AUTO_NO;
+//				config->start_exchange_flag = AUTO_NO;
 				break;
 			default:
 				break;
@@ -227,7 +217,7 @@ void Via_Point_Work(auto_info_t *Auto)
 
 /**
   * @Name    Via_Point_Achieve
-  * @brief   中间点实现，包络以上生成，检查，控制三个中间点函数
+  * @brief   中间点总控
   * @param   
   * @retval 
   * @author  
@@ -274,11 +264,12 @@ void Via_Point_Achieve(auto_info_t *Auto)
   * @Date    
 **/
 float max;
+float step_final = 20.f;
 void Final_Path_Achieve(auto_info_t *Auto)
 {
 	auto_config_info_t 			*config 	 = Auto->config;
 	unit_cicle_point_info_t *unit 		 = Auto->info->unit_cicle;
-	auto_via_motor_info_t		*via_motor =	Auto->info->via_motor;
+	auto_via_motor_info_t		*via_motor = Auto->info->via_motor;
 	
 	max=c_max2(unit->m,unit->n);
 	max=c_max2(max,unit->p);
@@ -287,21 +278,21 @@ void Final_Path_Achieve(auto_info_t *Auto)
 	{
 		if(max==unit->m)
 		{
-			transverse.base_info.target = via_motor->x+unit->m*VIA_POINT_STEP/TRANSVERSE_A2CM;
-			protract.base_info.target = via_motor->y+((transverse.base_info.measure_angle-via_motor->x)/(unit->m*VIA_POINT_STEP/TRANSVERSE_A2CM))*(unit->n/PROTRACT_A2CM);
-			uplift.target = via_motor->z+((transverse.base_info.measure_angle-via_motor->x)/(unit->m*VIA_POINT_STEP/TRANSVERSE_A2CM))*(unit->p/UPLIFT_A2CM);
+			transverse.base_info.target = via_motor->x+unit->m*step_final/TRANSVERSE_A2CM;
+			protract.base_info.target = via_motor->y-c_abs((transverse.base_info.measure_angle-via_motor->x)/(unit->m*step_final/TRANSVERSE_A2CM))*(unit->n*step_final/PROTRACT_A2CM);
+			uplift.target = via_motor->z-c_abs((transverse.base_info.measure_angle-via_motor->x)/(unit->m*step_final/TRANSVERSE_A2CM))*(unit->p*step_final/UPLIFT_A2CM);
 		}
 		else if(max==unit->n)
 		{
-			protract.base_info.target = via_motor->y+unit->n*VIA_POINT_STEP/PROTRACT_A2CM;
-			transverse.base_info.target = via_motor->x+((protract.base_info.measure_angle-via_motor->y)/(unit->n*VIA_POINT_STEP/PROTRACT_A2CM))*(unit->m/TRANSVERSE_A2CM);
-			uplift.target = via_motor->z+((protract.base_info.measure_angle-via_motor->y)/(unit->n*VIA_POINT_STEP/PROTRACT_A2CM))*(unit->p/UPLIFT_A2CM);
+			protract.base_info.target = via_motor->y-unit->n*step_final/PROTRACT_A2CM;
+			transverse.base_info.target = via_motor->x+c_abs((protract.base_info.measure_angle-via_motor->y)/(unit->n*step_final/PROTRACT_A2CM))*(unit->m*step_final/TRANSVERSE_A2CM);
+			uplift.target = via_motor->z-c_abs((protract.base_info.measure_angle-via_motor->y)/(unit->n*step_final/PROTRACT_A2CM))*(unit->p*step_final/UPLIFT_A2CM);
 		}
 		else
 		{
-			uplift.target = via_motor->z+unit->p*VIA_POINT_STEP/UPLIFT_A2CM;
-			transverse.base_info.target = via_motor->x+((uplift.measure_angle-via_motor->z)/(unit->p*VIA_POINT_STEP/UPLIFT_A2CM))*(unit->m/TRANSVERSE_A2CM);
-			protract.base_info.target = via_motor->y+((uplift.measure_angle-via_motor->z)/(unit->p*VIA_POINT_STEP/UPLIFT_A2CM))*(unit->n/PROTRACT_A2CM);
+			uplift.target = via_motor->z-unit->p*step_final/UPLIFT_A2CM;
+			transverse.base_info.target = via_motor->x+c_abs((uplift.measure_angle-via_motor->z)/(unit->p*step_final/UPLIFT_A2CM))*(unit->m*step_final/TRANSVERSE_A2CM);
+			protract.base_info.target = via_motor->y-c_abs((uplift.measure_angle-via_motor->z)/(unit->p*step_final/UPLIFT_A2CM))*(unit->n*step_final/PROTRACT_A2CM);
 		}
 		
 		if(distance(transverse.base_info.measure_angle,transverse.base_info.target)<2500&&\
@@ -310,7 +301,7 @@ void Final_Path_Achieve(auto_info_t *Auto)
 			 m_abs(protract.base_info.measure_speed)<10&&\
 			 distance(uplift.measure_angle,uplift.target)<1000&&\
 			 m_abs(uplift.measure_speed)<10)//--------------------------------
-			config->all_process_done = AUTO_OK;
+				config->all_process_done = AUTO_OK;
 	}
 	else
 		return;

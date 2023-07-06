@@ -413,6 +413,7 @@ void Chassis_speed_ctrl_switch(chassis_t *chassis,int16_t RC_FS,int16_t RC_RS,in
   * @author  HWX CCB
   * @Date    2022-12-03
 **/
+uint8_t imu_ok;
 void Chassis_Work_Normal(chassis_t *chassis)
 {
 	chassis_target_t *target = &chassis->base_info.target;
@@ -464,10 +465,15 @@ void Chassis_Work_Normal(chassis_t *chassis)
 						
 					break;
 				default:
+					if(chassis->work_info.chassis_imu_init_flag == 1)
+						imu_ok = 1;
+					else
+						imu_ok = 0;
+					
 					Chassis_speed_ctrl_switch(chassis,rc.base_info->ch3,rc.base_info->ch2,rc.base_info->ch0,\
 																		rc.base_info->W.cnt,rc.base_info->S.cnt,\
 																		rc.base_info->D.cnt,rc.base_info->A.cnt,\
-																		rc.info->mouse_x_K,1);
+																		rc.info->mouse_x_K,imu_ok);
 					
 					break;
 			}	
@@ -511,16 +517,14 @@ void Chassis_Work_Normal(chassis_t *chassis)
 **/
 void Chassis_Work(chassis_t *chassis)
 {
-	if(SYSTEM_RESET)
-		Chassis_Work_Normal(chassis);
+	if(chassis->motor_LB->state.work_state&&chassis->motor_LF->state.work_state\
+		&&chassis->motor_RB->state.work_state&&chassis->motor_RF->state.work_state)
+		chassis->work_info.work_sate = CHASSIC_ONLINE;
 	else
-	{
-		chassis->work_info.config.chassis_imu_angle = imu.info->yaw;
-		chassis->base_info.output.motor_LF_current = 0;
-		chassis->base_info.output.motor_RF_current = 0;
-		chassis->base_info.output.motor_LB_current = 0;
-		chassis->base_info.output.motor_RB_current = 0;
-	}
+		chassis->work_info.work_sate = CHASSIC_OFFLINE;
+	
+	if(chassis->work_info.work_sate)//SYSTEM_RESET
+		Chassis_Work_Normal(chassis);
 	
 }
 

@@ -88,7 +88,6 @@ typedef	struct	AUTO_INFO
 extern auto_info_t Auto;
 
 void Automatic_Exchange(auto_info_t *Auto);
-void Manual_Exchange(void);
 void Via_Point_Create(auto_info_t *Auto);
 void Via_Point_Check(auto_info_t *Auto);
 void Via_Point_Work(auto_info_t *Auto);

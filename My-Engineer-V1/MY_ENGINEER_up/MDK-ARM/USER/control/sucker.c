@@ -7,6 +7,7 @@
 
 /* Includes ------------------------------*/
 #include "sucker.h"
+#include "device.h"
 #include "control.h"
 /* Exported variables --------------------*/
 
@@ -84,11 +85,11 @@ Dev_Reset_State_e Sucker_Work_Init(sucker_t *sucker)
 		sucker->yaw->base_info.motor_out = sucker->base_info.output_yaw;
 		
 		if((distance(sucker->deffL->rx_info.angle_prev,sucker->deffL->rx_info.angle)<50)\
-				&&(m_abs(sucker->deffL->rx_info.speed)==0)\
+				&&(m_abs(sucker->deffL->rx_info.speed)<10)\
 				&&(distance(sucker->deffR->rx_info.angle_prev,sucker->deffR->rx_info.angle)<50)\
-				&&(m_abs(sucker->deffR->rx_info.speed)==0)\
+				&&(m_abs(sucker->deffR->rx_info.speed)<10)\
 				&&(distance(sucker->yaw->rx_info.angle_prev,sucker->yaw->rx_info.angle)<50)\
-				&&(m_abs(sucker->yaw->rx_info.speed)==0))
+				&&(m_abs(sucker->yaw->rx_info.speed)<10))
 			sucker_time_cnt++;
 		else
 			sucker_time_cnt = 0;
@@ -153,7 +154,7 @@ void Sucker_Work(sucker_t *sucker)
 			sucker->base_info.roll_A2D += 360;
 	}
 
-	if(SYSTEM_RESET&&sucker->work_sate)
+	if(SYSTEM_RESET&&DEVICE_ALLRIGHT_S)
 		Sucker_Work_Normal(sucker);			
 }
 

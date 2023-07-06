@@ -70,8 +70,11 @@ void car_mode_commond_update(car_t *car)
 			
 			/* ¼üÅÌ */
 			case KEY_CAR:
-				RC_status_scan(car);
-				KEY_status_scan(car);
+				if(DEVICE_ALLRIGHT)
+				{
+					RC_status_scan(car);
+					KEY_status_scan(car);
+				}
 				break;
 			
 			case MANUAL_EX:

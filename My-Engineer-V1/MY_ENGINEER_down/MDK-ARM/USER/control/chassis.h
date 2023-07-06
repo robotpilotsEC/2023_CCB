@@ -211,15 +211,15 @@ typedef struct
 typedef struct
 {
 	
-	chassis_config_t     config; 
+	chassis_config_t     	config; 
 	
-	uint16_t 			 output_max; 		/*!< @ref 底盘最大输出 */
-	uint16_t 			 speed_max;  		/*!< @ref 底盘最高速度 */
-	chassic_work_state_e work_sate;  		/*!< @ref 底盘工作状态 */
+	uint16_t 			 				output_max; 		/*!< @ref 底盘最大输出 */
+	uint16_t 			 				speed_max;  		/*!< @ref 底盘最高速度 */
+	chassic_work_state_e 	work_sate;  		/*!< @ref 底盘工作状态 */
 	
-	float               *power_limit_buffer;
+	float               	*power_limit_buffer;
 		
-	
+	uint8_t								chassis_imu_init_flag;
 }chassis_work_info_t;
 
 

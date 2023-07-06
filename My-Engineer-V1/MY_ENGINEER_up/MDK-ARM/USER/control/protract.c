@@ -7,6 +7,7 @@
 
 /* Includes ------------------------------*/
 #include "protract.h"
+#include "device.h"
 #include "control.h"
 /* Exported variables ---------------------*/
 
@@ -73,7 +74,7 @@ Dev_Reset_State_e Protract_Work_Init(protract_t *protract)
 		
 		
 		if((distance(protract->motor->rx_info.angle_prev,protract->motor->rx_info.angle)<200)\
-				&&(m_abs(protract->motor->rx_info.speed)<=10))
+				&&(m_abs(protract->motor->rx_info.speed)<=50))
 			protract_time_cnt++;
 		else
 			protract_time_cnt = 0;
@@ -119,7 +120,7 @@ void Protract_Work(protract_t *protract)
 	protract->base_info.angle2mm = protract->motor->rx_info.angle_sum*PROTRACT_A2MM;
 	protract->base_info.measure_speed = protract->motor->rx_info.speed;
 	
-	if(SYSTEM_RESET&&protract->work_sate)
+	if(SYSTEM_RESET&&DEVICE_ALLRIGHT_P)
 		Protract_Work_Normal(protract);
 }
 

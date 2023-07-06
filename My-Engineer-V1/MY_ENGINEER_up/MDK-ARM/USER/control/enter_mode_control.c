@@ -30,7 +30,10 @@ void enter_normal_mode(void)
 			{
 				case 1:
 					Auto.config->key_dowm1 = AUTO_NO;
+					Auto.config->key_dowm2 = AUTO_NO;
 					Auto.config->via_process_done = AUTO_NO;
+					Auto.config->all_process_done = AUTO_NO;
+					Auto.config->start_exchange_flag = AUTO_NO;
 					flip.mode = FLIP_OFF;
 					pneumatic.pneu_state = OFF;
 					protract.base_info.target = PROTRACT_MID;
@@ -656,9 +659,13 @@ void enter_exchange_mode(void)
 			{
 				case 1:	
 					Auto.step = 1;
+				
 					Auto.config->key_dowm1 = AUTO_NO;
+					Auto.config->key_dowm2 = AUTO_NO;
 					Auto.config->via_process_done = AUTO_NO;
+					Auto.config->all_process_done = AUTO_NO;
 				  Auto.config->start_exchange_flag = AUTO_NO;
+				
 					gimbal.target_pitch = GIMBAL_PITCH_MIN;
 					gimbal.target_yaw = GIMBAL_YAW_MID;
 					transverse.base_info.target = TRANSVERSE_NORMAL;
@@ -730,7 +737,7 @@ void enter_exchange_mode(void)
 					car.step_lock = 1;
 					if(Auto.config->via_process_done == AUTO_OK)
 					{
-						Auto.config->via_process_done = AUTO_NO;
+//						Auto.config->via_process_done = AUTO_NO;
 						car.step ++;
 					}
 				break;
@@ -740,6 +747,13 @@ void enter_exchange_mode(void)
 				break;
 				case 10:
 					car.step_lock = 0;
+				
+					Auto.config->key_dowm1 = AUTO_NO;
+					Auto.config->key_dowm2 = AUTO_NO;
+					Auto.config->via_process_done = AUTO_NO;
+					Auto.config->all_process_done = AUTO_NO;
+				  Auto.config->start_exchange_flag = AUTO_NO;
+				
 					sucker.base_info.target_roll = 0;
 					sucker.base_info.target_pitch = SUCKER_PITCH_MID;
 					sucker.base_info.target_yaw = SUCKER_YAW_MIN;

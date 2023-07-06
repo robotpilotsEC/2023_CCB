@@ -29,7 +29,12 @@ uint8_t reset_step1 = 0;
 void system_reset(void)
 {
 	if(!DEVICE_ALLRIGHT)
+	{
 		control.master_reset = DEV_RESET_OK;
+		communicate_tx_info.is_all_device_ok = 0;
+	}
+	else
+		communicate_tx_info.is_all_device_ok = 1;
 	
 	if(!SYSTEM_RESET&&RC_ONLINE&&DEVICE_ALLRIGHT)
 	{
@@ -94,6 +99,11 @@ void system_reset(void)
 			default:
 				break;
 		}
+	}
+	else if(SYSTEM_RESET&&RC_ONLINE&&!DEVICE_ALLRIGHT)
+	{
+		gimbal.target_pitch = GIMBAL_PITCH_MAX;
+		gimbal.target_yaw = GIMBAL_YAW_MIN;
 	}
 	else if((!RC_ONLINE&&DEVICE_ALLRIGHT))// || (transverse.work_sate == M_OFFLINE)
 	{	/*遥控器离线重新复位*/

@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "transverse.h"
 #include "control.h"
+#include "device.h"
 /* Exported variables --------------------------------------------------------*/
 
 
@@ -79,7 +80,7 @@ Dev_Reset_State_e Transverse_Work_Init(transverse_t *transverse)
 		else
 			Transverse_time_cnt = 0;
 		
-		if(Transverse_time_cnt>500)
+		if(Transverse_time_cnt>250)
 		{
 			transverse->front->rx_info.angle_prev = transverse->front->rx_info.angle;
 			transverse->back->rx_info.angle_prev = transverse->back->rx_info.angle;
@@ -123,7 +124,7 @@ void Transverse_Work(transverse_t *transverse)
 	transverse->base_info.angle2mm = transverse->front->rx_info.angle_sum*TRANSVERSE_A2MM;
 	transverse->base_info.measure_speed = transverse->front->rx_info.speed;
 	
-	if(SYSTEM_RESET&&transverse->work_sate)
+	if(SYSTEM_RESET&&DEVICE_ALLRIGHT_T)
 		Transverse_Work_Normal(transverse);
 }
 

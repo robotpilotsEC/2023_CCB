@@ -29,7 +29,6 @@ typedef struct{
 	motor_t						*motor;
 }device_t;
 
-
 extern device_t device[DEVICE_CNT];
 
 void device_init(void);

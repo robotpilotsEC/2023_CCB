@@ -13,12 +13,16 @@ control_t control = {
  * @date        
  * @brief       系统复位
  */
+uint8_t aaaaaaaaaa=0;
 void system_reset(void)
 {
-	if(!uplift.work_sate)
+	if(!uplift.work_sate||!ALL_DEVICE_OK)
 		control.slaver_reset = DEV_RESET_OK;
 	
-	if(!SYSTEM_RESET&&RC_ONLINE)
+	if(communicate_rx_info.is_master_reset == 1)
+		aaaaaaaaaa = 1;
+	
+	if(!SYSTEM_RESET&&RC_ONLINE&&ALL_DEVICE_OK)
 	{
 		rescue.reset = Rescue_Work_Init(&rescue);
 		gimbal.reset = Gimbal_Work_Init(&gimbal);
@@ -32,6 +36,8 @@ void system_reset(void)
 		}
 	
 	}
+	else if(SYSTEM_RESET&&RC_ONLINE&&!ALL_DEVICE_OK)
+		gimbal.reset = Gimbal_Work_Init(&gimbal);
 	else if(!RC_ONLINE)
 	{	/*遥控器离线重新复位*/
 		gimbal.base_info.target_pitch = 0;
@@ -42,6 +48,10 @@ void system_reset(void)
 		chassis.work_info.config.chassis_imu_angle = imu.info->yaw;
 		chassis.base_info.target.front_speed  = 0;
 		chassis.base_info.target.right_speed  = 0;
+		chassis.base_info.output.motor_LF_current = 0;
+		chassis.base_info.output.motor_RF_current = 0;
+		chassis.base_info.output.motor_LB_current = 0;
+		chassis.base_info.output.motor_RB_current = 0;
 		
 		car.mode_switch = NORMAL;
 		car.mode_ctrl = NORMAL;
